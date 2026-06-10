@@ -1,0 +1,27 @@
+/**
+ * E-PAIEMENT : Version 1.0.0, 07 Mai 2024
+ *
+ *   ____  _____  ______ _   _      _____ _______
+ *  / __ \|  __ \|  ____| \ | |    |_   _|__   __|
+ * | |  | | |__) | |__  |  \| |______| |    | |
+ * | |  | |  ___/|  __| | . ` |______| |    | |
+ * | |__| | |    | |____| |\  |     _| |_   | |
+ *  \____/|_|    |______|_| \_|    |_____|  |_|
+ *
+ *
+ * Ce code source est la propriete de OPEN IT.
+ * Il a ete livre dans le cadre du projet e-paiement.
+ *
+ * Ce code ne doit en aucun cas etre modifie et ou altere sans en avoir
+ * communiquer a OPEN IT a l'adresse : devs@open-it.sn.
+ *
+ * Tous les droits sont reserves a OPEN IT : https://www.open-it.sn
+ */
+package com.production.api.util;
+
+import java.util.Arrays;
+import java.util.List;
+
+public enum TypeProfil {
+    SUPER_ADMINISTRATEUR, ADMINISTRATEUR, GESTIONNAIRE, SUPERVISEUR, OPERATEUR, ASSURANCE_QUALITE;
+}

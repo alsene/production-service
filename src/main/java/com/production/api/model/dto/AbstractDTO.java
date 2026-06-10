@@ -1,0 +1,40 @@
+/**
+ * E-PAIEMENT : Version 1.0.0, 07 Mai 2024
+ *
+ *   ____  _____  ______ _   _      _____ _______
+ *  / __ \|  __ \|  ____| \ | |    |_   _|__   __|
+ * | |  | | |__) | |__  |  \| |______| |    | |
+ * | |  | |  ___/|  __| | . ` |______| |    | |
+ * | |__| | |    | |____| |\  |     _| |_   | |
+ *  \____/|_|    |______|_| \_|    |_____|  |_|
+ *
+ *
+ * Ce code source est la propriete de OPEN IT.
+ * Il a ete livre dans le cadre du projet e-paiement.
+ *
+ * Ce code ne doit en aucun cas etre modifie et ou altere sans en avoir
+ * communiquer a OPEN IT a l'adresse : devs@open-it.sn.
+ *
+ * Tous les droits sont reserves a OPEN IT : https://www.open-it.sn
+ */
+package com.production.api.model.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
+import java.util.Date;
+
+@Data
+public abstract class AbstractDTO {
+	protected String userCreation;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+	protected Date DateCreation = new Date();
+
+    protected String userModification;
+
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
+	protected Date DateModification = new Date();
+
+
+}

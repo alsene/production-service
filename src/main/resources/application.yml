@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: production-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/production?useUnicode=true&characterEncoding=UTF-8
+    username: postgres
+    password: root
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+server:
+  port: ${PORT:8081}
+
+client:
+  service:
+    url: http://localhost:8081
+    production:
+      endpoint: /api/production/endpoint/produit/v1
+    administration:
+      endpoint: /api/production/endpoint/administration/v1
+
+kind: Application
+
