@@ -134,4 +134,14 @@ public class SrvUtilisateur {
             return utilisateurRepository.findOperateursAndAssuranceQualite();
         });
     }
+
+    /**
+     * Get all products from database
+     */
+    public Mono<List<Utilisateur>> findAssuranceQualite() {
+        return Mono.fromCallable(() -> {
+            log.info("Fetching all Utilisateurs from database");
+            return utilisateurRepository.findAssuranceQualite();
+        });
+    }
 }

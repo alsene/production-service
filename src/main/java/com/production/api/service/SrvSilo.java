@@ -13,21 +13,21 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class SrvSilo {
-    private final SiloRepository SiloRepository;
+    private final SiloRepository siloRepository;
     
     public Mono<Silo> getSilo(){
-        Silo Silo = new Silo();
-        log.info("Returning Silo: {}", Silo);
-        return Mono.just(Silo);
+        Silo silo = new Silo();
+        log.info("Returning Silo: {}", silo);
+        return Mono.just(silo);
     }
 
     /**
      * Save a product to the database
      */
-    public Mono<Silo> saveSilo(Silo Silo) {
+    public Mono<Silo> saveSilo(Silo silo) {
         return Mono.fromCallable(() -> {
-            log.info("Saving Silo to database: {}", Silo);
-            Silo saved = SiloRepository.save(Silo);
+            log.info("Saving Silo to database: {}", silo);
+            Silo saved = siloRepository.save(silo);
             log.info("Silo saved with id: {}", saved.getId());
             return saved;
         });
@@ -39,7 +39,7 @@ public class SrvSilo {
     public Mono<Silo>  getSiloById(Long id) {
         return Mono.fromCallable(() -> {
             log.info("Fetching Silo with id: {}", id);
-            return SiloRepository.findById(id)
+            return siloRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Silo not found with id: " + id));
         });
     }
@@ -50,7 +50,7 @@ public class SrvSilo {
     public Mono<List<Silo>> getAllSilos() {
         return Mono.fromCallable(() -> {
             log.info("Fetching all Silos from database");
-            return SiloRepository.findAll();
+            return siloRepository.findAll();
         });
     }
 }

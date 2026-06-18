@@ -17,24 +17,8 @@
  *
  * Tous les droits sont reserves a OPEN IT : https://www.open-it.sn
  */
-package com.production.api.model.dto;
+package com.production.api.util;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-
-import java.util.Date;
-
-@Data
-public abstract class AbstractDTO {
-	protected Long idUserCreation;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
-	protected Date DateCreation = new Date();
-
-    protected Long idUserModification;
-
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy HH:mm:ss")
-	protected Date DateModification = new Date();
-
-    private boolean supprimer;
+public enum TypeLot {
+    LOT_PRODUIT, LOT_BIG_BAG;
 }

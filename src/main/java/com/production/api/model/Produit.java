@@ -54,7 +54,7 @@ public class Produit extends AbstractEntity{
 
     @ManyToOne
     @JoinColumn(name = "operateur_id", nullable = false)
-    private Operateur operateur;
+    private Utilisateur operateur;
 
     @ManyToOne
     @JoinColumn(name = "lot_id", nullable = false)
@@ -67,6 +67,10 @@ public class Produit extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "silo_id", nullable = false)
     private Silo silo;
+
+    @ManyToOne
+    @JoinColumn(name = "typeProduit_id", nullable = false)
+    private TypeProduit typeProduit;
 
     @Column(name = "QUALITE", length=20,columnDefinition = "varchar(20) default 'BLANC'", nullable = false)
     private String qualite;

@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class UtilisateurDTO extends AbstractDTO {
 
-    private String codeUtilisateur;
+    private Long id;
     private String nom;
 
     private String email;

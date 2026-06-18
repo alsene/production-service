@@ -18,9 +18,11 @@ public class ResponseProduction {
     private List<Produit> produits;
     private List<Silo> silos;
     private List<Lot> lots;
+    private List<Lot> lotBags;
     private List<Client> clients;
-    private List<Operateur> operateurs;
-    private List<Utilisateur> operateursAndAssuranceQualites;
+    private List<TypeProduit> typeProduits;
+    private List<Utilisateur> operateurs;
+    private List<Utilisateur> listQA;
     private Retour retour;
     private Boolean souvenirAppareil;
 }

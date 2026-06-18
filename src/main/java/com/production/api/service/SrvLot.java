@@ -13,21 +13,21 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 public class SrvLot {
-    private final LotRepository LotRepository;
+    private final LotRepository lotRepository;
     
     public Mono<Lot> getLot(){
-        Lot Lot = new Lot();
-        log.info("Returning Lot: {}", Lot);
-        return Mono.just(Lot);
+        Lot lot = new Lot();
+        log.info("Returning Lot: {}", lot);
+        return Mono.just(lot);
     }
 
     /**
      * Save a product to the database
      */
-    public Mono<Lot> saveLot(Lot Lot) {
+    public Mono<Lot> saveLot(Lot lot) {
         return Mono.fromCallable(() -> {
-            log.info("Saving Lot to database: {}", Lot);
-            Lot saved = LotRepository.save(Lot);
+            log.info("Saving Lot to database: {}", lot);
+            Lot saved = lotRepository.save(lot);
             log.info("Lot saved with id: {}", saved.getId());
             return saved;
         });
@@ -39,7 +39,7 @@ public class SrvLot {
     public Mono<Lot>  getLotById(Long id) {
         return Mono.fromCallable(() -> {
             log.info("Fetching Lot with id: {}", id);
-            return LotRepository.findById(id)
+            return lotRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Lot not found with id: " + id));
         });
     }
@@ -50,7 +50,7 @@ public class SrvLot {
     public Mono<List<Lot>> getAllLots() {
         return Mono.fromCallable(() -> {
             log.info("Fetching all Lots from database");
-            return LotRepository.findAll();
+            return lotRepository.findAll();
         });
     }
 }

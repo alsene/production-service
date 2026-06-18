@@ -8,12 +8,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "lot")
+@Table(name = "type_produit")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Lot extends AbstractEntity{
+public class TypeProduit extends AbstractEntity{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +24,5 @@ public class Lot extends AbstractEntity{
 
     @Column(name = "description", length = 255, nullable = false)
     private String description;
-
-    @Column(name = "type_lot", length = 25, nullable = true)
-    @Enumerated(EnumType.STRING)
-    private TypeLot typeLot;
 
 }

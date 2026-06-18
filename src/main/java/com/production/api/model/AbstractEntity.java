@@ -49,7 +49,7 @@ public abstract class AbstractEntity implements Serializable {
 	@CreatedBy
 	@Column(name = "USER_CREATION", updatable = false, length = 80)
 	@JsonIgnore
-	private String userCreation;
+	private Long idUserCreation;
 
 	@LastModifiedDate
 	@Column(name = "DATE_MODIFICATION", length = 19)
@@ -60,7 +60,7 @@ public abstract class AbstractEntity implements Serializable {
 	@LastModifiedBy
 	@Column(name = "USER_MODIFICATION", length = 80)
 	@JsonIgnore
-	private String userModification;
+	private Long idUserModification;
 
     @Column(name = "is_supprimer", columnDefinition = "boolean default false", nullable = false)
     private boolean supprimer;

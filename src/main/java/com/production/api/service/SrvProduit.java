@@ -66,7 +66,7 @@ public class SrvProduit {
 
     /** * Modify a product in the database */
     @Transactional
-    public Mono<Void> modifierProduit(ProduitDTO produitDTO) {
+    public Mono<Produit> modifierProduit(ProduitDTO produitDTO) {
         return Mono.fromCallable(() -> {
             log.info("Modifying produit: {}", produitDTO);
 
@@ -87,7 +87,7 @@ public class SrvProduit {
 
             produitRepository.save(produitExistant);
             log.info("Produit modifié avec id: {}", produitExistant.getId());
-            return (Void) null;
+            return produitExistant;
         }).subscribeOn(Schedulers.boundedElastic());
     }
 

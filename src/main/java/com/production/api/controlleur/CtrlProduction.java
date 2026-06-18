@@ -1,11 +1,14 @@
 package com.production.api.controlleur;
 
+import com.production.api.model.Utilisateur;
+import com.production.api.model.dto.UtilisateurDTO;
 import com.production.api.model.mapper.ProduitMapper;
 import com.production.api.model.Produit;
 import com.production.api.model.ResponseProduction;
 import com.production.api.model.dto.ProduitDTO;
 import com.production.api.service.FacadeProductionService;
 import com.production.api.service.SrvProduit;
+import com.production.api.util.Qualite;
 import com.production.api.util.Retour;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,35 +57,36 @@ public class CtrlProduction {
         return ResponseEntity.ok(response);
     }*/
     @PostMapping(value = "/ajouter")
-    public ResponseEntity<ResponseProduction> ajouterProduit(@RequestBody ProduitDTO produitDTO){
+    public ResponseEntity<Produit> ajouterProduit(@RequestBody ProduitDTO produitDTO){
         log.info("POST /api/production/endpoint/produit/v1/ajouter called");
+        Utilisateur operateur= new Utilisateur();
+        operateur.setId(1L);
+        produitDTO.setOperateur(operateur);
+        produitDTO.setNom("couscous");
+        produitDTO.setQualite(Qualite.BLANC.name());
+        produitDTO.setIdUserCreation(1L);
+        produitDTO.setIdUserModification(1L);
         Produit produit = produitMapper.toEntity(produitDTO);
-        ResponseProduction response = new ResponseProduction();
         // Assuming there's a method to add a product
-        srvProduit.ajouterProduit(produit).block(); // Blocking call to add the product
-        response.setRetour(Retour.builder().code("Succes").httpCode(200).build()); // Set to null for now, can be populated with actual return status if needed
-        return ResponseEntity.ok(response);
+        Produit addedProduit= srvProduit.ajouterProduit(produit).block(); // Blocking call to add the product
+        return ResponseEntity.ok(addedProduit);
     }
 
     @DeleteMapping(value = "/supprimer/{id}")
-    public ResponseEntity<ResponseProduction> supprimerProduit(@PathVariable Long id){
+    public ResponseEntity<Void> supprimerProduit(@PathVariable Long id){
         log.info("DELETE /api/production/endpoint/produit/v1/supprimer called");
-
-        ResponseProduction response = new ResponseProduction();
         // Assuming there's a method to delete a product
         srvProduit.supprimerProduit(id).block(); // Blocking call to delete the product
-        response.setRetour(Retour.builder().code("Succes").httpCode(200).build()); // Set to null for now, can be populated with actual return status if needed
-        return ResponseEntity.ok(response);
+      // Set to null for now, can be populated with actual return status if needed
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/modifier")
-    public ResponseEntity<ResponseProduction> modifierProduit(@RequestBody ProduitDTO produitDTO){
+    public ResponseEntity<Produit> modifierProduit(@RequestBody ProduitDTO produitDTO){
         log.info("POST /api/production/endpoint/produit/v1/ajouter called");
-        ResponseProduction response = new ResponseProduction();
         // Assuming there's a method to add a product
-        srvProduit.modifierProduit(produitDTO).block(); // Blocking call to add the product
-        response.setRetour(Retour.builder().code("Succes").httpCode(200).build()); // Set to null for now, can be populated with actual return status if needed
-        return ResponseEntity.ok(response);
+        Produit updatedProduit= srvProduit.modifierProduit(produitDTO).block(); // Blocking call to add the product// Set to null for now, can be populated with actual return status if needed
+        return ResponseEntity.ok(updatedProduit);
     }
 
 }

@@ -22,5 +22,11 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
      */
     @Query("SELECT a FROM Utilisateur a, Profil p, ProfilUtilisateur pu WHERE a.id = pu.utilisateur.id AND p.id = pu.profil.id AND (p.typeProfil = 'OPERATEUR' OR p.typeProfil = 'ASSURANCE_QUALITE')")
     List<Utilisateur> findOperateursAndAssuranceQualite();
+
+    /**
+     * Find all users who are either quality assurance specialists
+     */
+    @Query("SELECT a FROM Utilisateur a, Profil p, ProfilUtilisateur pu WHERE a.id = pu.utilisateur.id AND p.id = pu.profil.id AND p.typeProfil = 'ASSURANCE_QUALITE'")
+    List<Utilisateur> findAssuranceQualite();
 }
 

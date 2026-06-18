@@ -1,5 +1,6 @@
 package com.production.api.model.dto;
 
+import com.production.api.model.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -7,22 +8,24 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class ProduitDTO extends AbstractDTO {
-
+    private Long id;
     private String nom;
 
     private String quantite;
 
     private String code;
 
-    private Long clientId;
+    private Client client;
 
-    private Long operateurId;
+    private Utilisateur operateur;
 
-    private Long lotId;
+    private Lot lot;
 
-    private Long lotBagId;
+    private Lot lotBag;
 
-    private Long siloId;
+    private Silo silo;
+
+    private TypeProduit typeProduit;
 
     private String qualite;
 
