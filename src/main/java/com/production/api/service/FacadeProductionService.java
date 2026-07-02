@@ -24,11 +24,11 @@ public class FacadeProductionService {
     private final SrvClient srvClient;
     private final SrvUtilisateur srvUtilisateur;
 
-    public Mono<Mono<ResponseProduction>> obtenirPayloadProduction(String qualite) {
+    public Mono<Mono<ResponseProduction>> obtenirPayloadProduction(String conforme) {
         return Mono.fromCallable(() -> {
             log.info("Fetching all produits from database");
 
-            Mono<List<Produit>> produitsMono =srvProduit.findAllProduitsByQualite(qualite);
+            Mono<List<Produit>> produitsMono =srvProduit.findAllProduitsByQualiteConforme(conforme);
             
             Mono<List<Client>> clientsMono = srvClient.getAllClients();
             Mono<List<Lot>> lotsMono = srvLot.getAllLots();

@@ -15,8 +15,9 @@ public class UtilisateurDTO extends AbstractDTO {
 
     private Long id;
     private String nom;
-
+    private String prenom;
     private String email;
+    private String compagnie;
 
     private String codeActivation;
 

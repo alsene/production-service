@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
+
 @Component
 @Slf4j
 public class ClientProduit {
@@ -26,7 +28,7 @@ public class ClientProduit {
     public Mono<Produit> getAllProduit() {
         Produit produit = new Produit();
         produit.setNom("Produit Test");
-        produit.setQuantite("100");
+        produit.setQuantite(BigDecimal.valueOf(100));
         log.info("ClientProduit.getAllProduit called, returning test product: {}", produit);
         Mono<Produit> testMono = Mono.just(produit);
         log.info("Test Mono created: {}", testMono);

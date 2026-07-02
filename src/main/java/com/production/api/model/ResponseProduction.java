@@ -23,6 +23,7 @@ public class ResponseProduction {
     private List<TypeProduit> typeProduits;
     private List<Utilisateur> operateurs;
     private List<Utilisateur> listQA;
+    private List<String> qualites;
     private Retour retour;
     private Boolean souvenirAppareil;
 }

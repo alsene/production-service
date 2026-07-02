@@ -20,5 +20,5 @@
 package com.production.api.util;
 
 public enum Qualite {
-	BLANC, VERT, ROUGE, JAUNE
+    DEFAULT, STANDARD, EXCELLENCE, PREMIUM
 }

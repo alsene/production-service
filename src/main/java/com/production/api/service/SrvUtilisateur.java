@@ -58,7 +58,7 @@ public class SrvUtilisateur {
 
     /** * Modify a product in the database */
     @Transactional
-    public Mono<Void> modifierUtilisateur(UtilisateurDTO utilisateurDTO) {
+    public Mono<Utilisateur> modifierUtilisateur(UtilisateurDTO utilisateurDTO) {
         return Mono.fromCallable(() -> {
             log.info("Modifying Utilisateur: {}", utilisateurDTO);
 
@@ -79,9 +79,12 @@ public class SrvUtilisateur {
 
             utilisateurRepository.save(utilisateurExistant);
             log.info("Utilisateur modifié avec id: {}", utilisateurExistant.getId());
-            return (Void) null;
+            return utilisateurExistant;
         }).subscribeOn(Schedulers.boundedElastic());
     }
+
+
+
 
     /**
      * Get product by ID from database

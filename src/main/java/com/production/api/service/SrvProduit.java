@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +32,7 @@ public class SrvProduit {
     public Mono<Produit> getProduit(){
         Produit produit = new Produit();
         produit.setNom("Produit Test2");
-        produit.setQuantite("200");
+        produit.setQuantite(BigDecimal.valueOf(200));
         log.info("Returning produit: {}", produit);
         return Mono.just(produit);
     }
@@ -140,6 +141,15 @@ public class SrvProduit {
         return Mono.fromCallable(() -> {
             log.info("Fetching all Lots from database");
             return produitRepository.findAllProduitsByQualite(qualite);
+        });
+    }
+    /**
+     * Get all products from database
+     */
+    public Mono<List<Produit>> findAllProduitsByQualiteConforme(String comforme) {
+        return Mono.fromCallable(() -> {
+            log.info("Fetching all Lots from database");
+            return produitRepository.findAllProduitsByQualiteConforme(Boolean.valueOf(comforme));
         });
     }
 }

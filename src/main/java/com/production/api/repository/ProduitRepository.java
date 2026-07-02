@@ -36,6 +36,9 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
     @Query("SELECT a FROM Produit a WHERE a.qualite =:qualite")
     List<Produit> findAllProduitsByQualite(String qualite);
 
+    @Query("SELECT a FROM Produit a WHERE a.conforme =:conforme")
+    List<Produit> findAllProduitsByQualiteConforme(Boolean conforme);
+
     @Query("SELECT a FROM Produit a WHERE a.code =:code")
     Produit findProduitByCode(String code);
 }

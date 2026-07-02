@@ -22,8 +22,14 @@ public class Utilisateur extends AbstractEntity{
     @Column(name = "nom", nullable = false)
     private String nom;
 
+    @Column(name = "prenom", nullable = false)
+    private String prenom;
+
     @Column(name = "email", nullable = false)
     private String email;
+
+    @Column(name = "compagnie", nullable = false)
+    private String compagnie;
 
     @JsonIgnore
     @Column(name = "code_activation", nullable = false, length = 200)
