@@ -22,7 +22,7 @@ public class SrvProfil {
     private final ProfilRepository profilRepository;
     private final ProfilMapper profilMapper;
 
-    
+
     public Mono<Profil> getProfil(){
         Profil profil = new Profil();
         profil.setLibelle("Profil Test2");
@@ -59,8 +59,8 @@ public class SrvProfil {
     }
 
     /** * Modify a product in the database */
-   /* @Transactional
-    public Mono<Void> modifierProfil(ProfilDTO profilDTO) {
+   @Transactional
+    public Mono<Profil> modifierProfil(ProfilDTO profilDTO) {
         return Mono.fromCallable(() -> {
             log.info("Modifying profil: {}", profilDTO);
 
@@ -70,20 +70,25 @@ public class SrvProfil {
 
             // Vérifier que le profil existe
             Optional<Profil> profilExistant = profilRepository.findById(profilDTO.getId());
-
+            Profil profExistant;
+            if (profilExistant.isPresent()) {
+                profExistant = profilExistant.get();
+            }else{
+                throw new IllegalArgumentException("Profil not found with code: " + profilDTO.getId());
+            }
             if (profilExistant == null) {
                 throw new IllegalArgumentException("Profil not found with code: " + profilDTO.getId());
             }
 
             // Utiliser le mapper pour copier les champs non-null
-            profilMapper.updateProfilFromDto(profilDTO, profilExistant);
-            profilExistant.setDateModification(new Date());
+            profilMapper.updateProfilFromDto(profilDTO, profExistant);
+            profExistant.setDateModification(new Date());
 
-            profilRepository.save(profilExistant);
-            log.info("Profil modifié avec id: {}", profilExistant.getId());
-            return (Void) null;
+            profilRepository.save(profExistant);
+            log.info("Profil modifié avec id: {}", profExistant.getId());
+            return profExistant;
         }).subscribeOn(Schedulers.boundedElastic());
-    }*/
+    }
 
     /**
      * Get product by ID from database

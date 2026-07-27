@@ -16,6 +16,12 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseProduction {
     private List<Produit> produits;
+    private List<Produit> produitsPourFulminer;
+    private List<Produit> produitsPourQualite;
+    private List<Produit> produitsConforme;
+    private List<Produit> produitsFulminer;
+    private List<Produit> produitsExpedier;
+    private List<Produit> produitsArecycler;
     private List<Silo> silos;
     private List<Lot> lots;
     private List<Lot> lotBags;

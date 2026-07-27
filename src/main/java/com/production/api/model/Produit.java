@@ -62,11 +62,20 @@ public class Produit extends AbstractEntity{
     @Column(name = "qualite", length = 20, nullable = false)
     private Qualite qualite;
 
-    @Column(name = "FULMINE")
+    @Column(name = "FULMINE", columnDefinition = "boolean default false", nullable = false)
     private Boolean fulmine;
 
-    @Column(name = "CONFORME")
+    @Column(name = "CONFORME", columnDefinition = "boolean default false", nullable = false)
     private Boolean conforme;
+
+    @Column(name = "expedier", columnDefinition = "boolean default false", nullable = false)
+    private Boolean expedier;
+
+    @Column(name = "arecycler", columnDefinition = "boolean default false", nullable = false)
+    private Boolean arecycler;
+
+    @Column(name = "encours", columnDefinition = "boolean default true", nullable = false)
+    private Boolean encours;
 
     @OneToMany(mappedBy = "produit", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference

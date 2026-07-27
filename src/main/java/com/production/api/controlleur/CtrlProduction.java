@@ -36,6 +36,7 @@ public class CtrlProduction {
     private final ProduitMapper produitMapper;
     private final CommentaireProduitMapper commentaireProduitMapper;
 
+
     // Endpoint that returns data directly (used by ClientProduit via WebClient to avoid infinite loop)
     @GetMapping
     public Mono<ResponseEntity<Produit>> getProduit(){
@@ -49,10 +50,10 @@ public class CtrlProduction {
         });
     }
 
-    @GetMapping(value = "/assurance-qualite/{conforme}")
-    public ResponseEntity<ResponseProduction> getProduitsForQualite(@PathVariable String  conforme){
+    @GetMapping(value = "/assurance-qualite/{encours}")
+    public ResponseEntity<ResponseProduction> getProduitsForQualite(@PathVariable String  encours){
         log.info("GET /api/production/endpoint/produit/v1/assurance-qualite called");
-        Mono<Mono<ResponseProduction>> monoMono= facadeProductionService.obtenirPayloadProduction(conforme);
+        Mono<Mono<ResponseProduction>> monoMono= facadeProductionService.obtenirPayloadProduction(encours);
         ResponseProduction responseFromFacade = monoMono.flatMap(mono -> mono).block(); // Blocking call to get the response from the facade
         List<String> qualites = List.of(Qualite.STANDARD.name(), Qualite.PREMIUM.name(), Qualite.EXCELLENCE.name());
         if(responseFromFacade == null) {
@@ -72,6 +73,7 @@ public class CtrlProduction {
         produitDTO.setQualite(Qualite.DEFAULT.name());
         produitDTO.setIdUserCreation(1L);
         produitDTO.setIdUserModification(1L);
+        produitDTO.setEncours(Boolean.TRUE);
         Produit produit = produitMapper.toEntity(produitDTO);
         // Assuming there's a method to add a product
         Produit addedProduit= srvProduit.ajouterProduit(produit).block(); // Blocking call to add the product

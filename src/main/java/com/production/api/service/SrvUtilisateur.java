@@ -1,16 +1,20 @@
 package com.production.api.service;
 
+import com.production.api.model.ActivationCode;
 import com.production.api.model.Utilisateur;
 import com.production.api.model.dto.UtilisateurDTO;
 import com.production.api.model.mapper.UtilisateurMapper;
+import com.production.api.repository.ActivationCodeRepository;
 import com.production.api.repository.UtilisateurRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +23,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SrvUtilisateur {
     private final UtilisateurRepository utilisateurRepository;
+    private final ActivationCodeRepository activationCodeRepository;
     private final UtilisateurMapper utilisateurMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public Mono<Utilisateur> getUtilisateur(){
         Utilisateur utilisateur = new Utilisateur();
@@ -34,12 +40,29 @@ public class SrvUtilisateur {
     public Mono<Utilisateur> ajouterUtilisateur(Utilisateur utilisateur) {
         return Mono.fromCallable(() -> {
             log.info("Saving Utilisateur to database: {}", utilisateur);
+            if (utilisateur.getPassword() != null && !utilisateur.getPassword().isBlank() && !utilisateur.getPassword().startsWith("$2")) {
+                utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
+            }
             Utilisateur saved = utilisateurRepository.save(utilisateur);
             log.info("Utilisateur saved with id: {}", saved.getId());
             return saved;
         });
     }
+    public boolean validateCode(ActivationCode activationCode) {
+        // Vérifie si le code a expiré
+        if (activationCode.getExpiryDate().isBefore(LocalDateTime.now())) {
+            return false;
+        }
 
+        // Activer l'utilisateur
+        Utilisateur user = activationCode.getUtilisateur();
+        user.setActif(true);
+
+        // Sauvegarder l'utilisateur et supprimer le code (usage unique)
+        utilisateurRepository.save(user);
+        activationCodeRepository.delete(activationCode);
+        return true;
+    }
     /**
      * Save a product to the database
      */
@@ -75,6 +98,13 @@ public class SrvUtilisateur {
 
             // Utiliser le mapper pour copier les champs non-null
             utilisateurMapper.updateUtilisateurFromDto(utilisateurDTO, utilisateurExistant);
+
+            if (utilisateurExistant.getPassword() != null
+                    && !utilisateurExistant.getPassword().isBlank()
+                    && !utilisateurExistant.getPassword().startsWith("$2")) {
+                utilisateurExistant.setPassword(passwordEncoder.encode(utilisateurExistant.getPassword()));
+            }
+
             utilisateurExistant.setDateModification(new Date());
 
             utilisateurRepository.save(utilisateurExistant);

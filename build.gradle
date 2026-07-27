@@ -24,6 +24,10 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.6'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.6'
 	// JPA and PostgreSQL driver for Production schema
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'jakarta.persistence:jakarta.persistence-api'
@@ -31,8 +35,8 @@ dependencies {
 	//compileOnly 'org.projectlombok:lombok'
 	//annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-webflux-test'
-    implementation 'org.projectlombok:lombok:1.18.32'
-    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+    compileOnly "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
     implementation 'org.mapstruct:mapstruct:1.6.3'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
@@ -40,18 +44,19 @@ dependencies {
     // Crucial bridge to wire Lombok and MapStruct together
     //annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0
 
-	testCompileOnly 'org.projectlombok:lombok'
+    testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testAnnotationProcessor 'org.projectlombok:lombok'
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
-sourceSets {
+/*sourceSets {
     main {
         java {
             srcDirs += 'build/generated/sources/annotationProcessor/java/main'
         }
     }
-}
+}*/

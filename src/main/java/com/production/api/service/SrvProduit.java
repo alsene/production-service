@@ -146,10 +146,10 @@ public class SrvProduit {
     /**
      * Get all products from database
      */
-    public Mono<List<Produit>> findAllProduitsByQualiteConforme(String comforme) {
+    public Mono<List<Produit>> findAllProduitsByEncours(String encours) {
         return Mono.fromCallable(() -> {
             log.info("Fetching all Lots from database");
-            return produitRepository.findAllProduitsByQualiteConforme(Boolean.valueOf(comforme));
+            return produitRepository.findAllProduitsByEncours(Boolean.valueOf(encours));
         });
     }
 }

@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 public class ProfilDTO extends AbstractDTO {
     private Long id;
     private String libelle;
-    private TypeProfil typeProfil;
+    private String typeProfil;
     private String description;
 
 }

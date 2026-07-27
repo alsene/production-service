@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "utilisateur")
 @Data
@@ -31,9 +33,8 @@ public class Utilisateur extends AbstractEntity{
     @Column(name = "compagnie", nullable = false)
     private String compagnie;
 
-    @JsonIgnore
-    @Column(name = "code_activation", nullable = false, length = 200)
-    private String codeActivation;
+    @Column(name = "is_actif", columnDefinition = "boolean default false", nullable = false)
+    private boolean actif;
 
     @JsonIgnore
     @Column(name = "password", nullable = false, length = 200)
@@ -44,9 +45,6 @@ public class Utilisateur extends AbstractEntity{
 
     @Column(name = "telephone", nullable = false)
     private String telephone;
-
-    @Column(name = "numero", length = 20, nullable = false)
-    private String numero;
 
     @Column(name = "rue", nullable = false)
     private String rue;

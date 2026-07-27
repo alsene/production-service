@@ -3,7 +3,10 @@ package com.production.api.model.mapper;
 
 import com.production.api.model.Produit;
 import com.production.api.model.dto.ProduitDTO;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ProduitMapper {

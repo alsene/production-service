@@ -23,7 +23,7 @@ public class Profil extends AbstractEntity{
     private String libelle;
 
 
-    @Column(name = "type_profil", length = 25, nullable = false)
+    @Column(name = "type_profil", length = 25, nullable = true)
     @Enumerated(EnumType.STRING)
     private TypeProfil typeProfil;
 

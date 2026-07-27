@@ -4,6 +4,9 @@ import com.production.api.model.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -30,5 +33,15 @@ public class ProduitDTO extends AbstractDTO {
     private String qualite;
 
     private Boolean fulmine;
+
+    private Boolean conforme;
+
+    private Boolean expedier;
+
+    private Boolean arecycler;
+
+    private Boolean encours;
+
+    private List<CommentaireProduit> commentaires= new ArrayList<>();
 
 }

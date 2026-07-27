@@ -1,10 +1,5 @@
 package com.production.api.model.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,16 +13,13 @@ public class UtilisateurDTO extends AbstractDTO {
     private String prenom;
     private String email;
     private String compagnie;
-
-    private String codeActivation;
+    private boolean actif;
 
     private String password ;
 
     private boolean changePassword;
 
     private String telephone;
-
-    private String numero;
 
     private String rue;
 

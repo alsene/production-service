@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,11 +23,11 @@ public class FacadeProductionService {
     private final SrvClient srvClient;
     private final SrvUtilisateur srvUtilisateur;
 
-    public Mono<Mono<ResponseProduction>> obtenirPayloadProduction(String conforme) {
+    public Mono<Mono<ResponseProduction>> obtenirPayloadProduction(String encours) {
         return Mono.fromCallable(() -> {
             log.info("Fetching all produits from database");
 
-            Mono<List<Produit>> produitsMono =srvProduit.findAllProduitsByQualiteConforme(conforme);
+            Mono<List<Produit>> produitsMono =srvProduit.findAllProduitsByEncours(encours);
             
             Mono<List<Client>> clientsMono = srvClient.getAllClients();
             Mono<List<Lot>> lotsMono = srvLot.getAllLots();
@@ -54,6 +53,13 @@ public class FacadeProductionService {
                     response.setClients(clients);
                     response.setLotBags(lots.stream().filter(lot -> lot.getTypeLot() == TypeLot.LOT_BIG_BAG).collect(Collectors.toList())); // Assuming lotBags is a field in ResponseProduction
                     response.setLots(lots.stream().filter(lot -> lot.getTypeLot() == TypeLot.LOT_PRODUIT).collect(Collectors.toList()));
+                    response.setProduitsConforme(produits.stream().filter(produit -> Boolean.TRUE.equals(produit.getConforme()) && Boolean.TRUE.equals(produit.getEncours())).collect(Collectors.toList())); // Assuming lotBags is a field in ResponseProductiontion
+                    response.setProduitsFulminer(produits.stream().filter(produit -> Boolean.TRUE.equals(produit.getFulmine()) && Boolean.TRUE.equals(produit.getEncours())).collect(Collectors.toList()));
+                    response.setProduitsPourQualite(produits.stream().filter(produit -> Boolean.FALSE.equals(produit.getConforme()) && Boolean.TRUE.equals(produit.getEncours())).collect(Collectors.toList())); // Assuming lotBags is a field in ResponseProductiontion
+                    response.setProduitsPourFulminer(produits.stream().filter(produit -> Boolean.FALSE.equals(produit.getFulmine()) && Boolean.TRUE.equals(produit.getEncours())).collect(Collectors.toList()));
+                    response.setProduitsExpedier(produits.stream().filter(produit -> Boolean.TRUE.equals(produit.getExpedier())).collect(Collectors.toList()));
+                    response.setProduitsArecycler(produits.stream().filter(produit -> Boolean.TRUE.equals(produit.getArecycler())).collect(Collectors.toList()));
+
                     response.setSilos(silos);
                     response.setListQA(listeQA);
                     response.setTypeProduits(typesProduits);

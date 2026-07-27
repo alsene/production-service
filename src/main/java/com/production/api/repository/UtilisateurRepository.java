@@ -10,6 +10,7 @@ import java.util.List;
 @Repository
 public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> {
 
+    Utilisateur findByEmail(String email);
 
     @Query("SELECT a FROM Utilisateur a WHERE a.email =:email")
     Utilisateur findUtilisateurByEmail(String email);
