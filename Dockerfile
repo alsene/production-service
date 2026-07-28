@@ -3,7 +3,7 @@ WORKDIR /app
 
 COPY . .
 RUN chmod +x ./gradlew
-RUN ./gradlew bootJar -x test
+RUN ./gradlew bootJar -x test --no-daemon --debug
 
 FROM eclipse-temurin:21-jre
 WORKDIR /app
