@@ -21,6 +21,10 @@ repositories {
 	mavenCentral()
 }
 
+configurations {
+	mockitoAgent
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -46,12 +50,18 @@ dependencies {
 
     testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
     testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+	testImplementation 'org.mockito:mockito-junit-jupiter'
+	mockitoAgent('org.mockito:mockito-core') {
+		transitive = false
+	}
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+	jvmArgs "-javaagent:${configurations.mockitoAgent.singleFile}"
+	jvmArgs "-Xshare:off"
 }
 /*sourceSets {
     main {
