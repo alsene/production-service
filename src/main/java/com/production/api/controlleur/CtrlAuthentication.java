@@ -1,8 +1,8 @@
 package com.production.api.controlleur;
 
 import com.production.api.model.dto.AuthResponseDTO;
-import com.production.api.model.dto.LoginRequestDTO;
 import com.production.api.model.dto.ErrorResponseDTO;
+import com.production.api.model.dto.LoginRequestDTO;
 import com.production.api.model.dto.RefreshTokenRequestDTO;
 import com.production.api.security.JwtService;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Date;
 
 @RestController
 @RequestMapping("/api/auth")
