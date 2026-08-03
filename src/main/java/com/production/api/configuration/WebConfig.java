@@ -10,7 +10,7 @@ import java.util.Arrays;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final String allowedOrigins="http://localhost:4200, https://sentechno-dev.com,https://www.sentechno-dev.com, https://www.sentechno-dev.com/login, https://api.sentechno-dev.com"; // Valeurs par défaut
+    private final String allowedOrigins="http://localhost:4200, https://sentechno-dev.com, https://www.sentechno-dev.com, https://www.sentechno-dev.com/login, https://api.sentechno-dev.com"; // Valeurs par défaut
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
