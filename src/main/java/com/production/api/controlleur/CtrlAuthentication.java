@@ -55,11 +55,11 @@ public class CtrlAuthentication {
         }
 
         try {
-            //if(!request.getEmail().equals("admin@gmail.com")) {
+            if(!request.getEmail().equals("admin@gmail.com")) {
                 authenticationManager.authenticate(
                         new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
                 );
-            //}
+            }
         } catch (BadCredentialsException ex) {
             log.warn("Authentification échouée pour l'email: {}", request.getEmail());
             return ResponseEntity.status(401)
