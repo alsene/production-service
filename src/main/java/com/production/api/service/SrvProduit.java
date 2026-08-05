@@ -146,10 +146,11 @@ public class SrvProduit {
     /**
      * Get all products from database
      */
+    @Transactional(readOnly = true)
     public Mono<List<Produit>> findAllProduitsByEncours(String encours) {
         return Mono.fromCallable(() -> {
             log.info("Fetching all Lots from database");
             return produitRepository.findAllProduitsByEncours(Boolean.valueOf(encours));
-        });
+        }).subscribeOn(Schedulers.boundedElastic());
     }
 }

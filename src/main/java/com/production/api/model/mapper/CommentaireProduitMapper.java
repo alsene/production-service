@@ -21,6 +21,7 @@ public interface CommentaireProduitMapper {
 
     CommentaireProduitDTO toDtoForUpdate(CommentaireProduit obj);
 
+    @Mapping(target = "produit", ignore = true)
     void updateCommentaireProduitFromDto(CommentaireProduitDTO source, @MappingTarget CommentaireProduit destination);
 
 }

@@ -100,16 +100,23 @@ public class CtrlProduction {
     @PostMapping(value = "/ajouterCommentaire")
     public ResponseEntity<CommentaireProduit> ajouterCommentaire(@RequestBody CommentaireProduitDTO objDTO){
         log.info("POST /api/production/endpoint/produit/v1/ajouterCommentaire called");
-        // Assuming there's a method to add a product
+        // Le commentaire doit toujours être rattaché à un Produit existant (FK non null)
+        if (objDTO.getProduit() == null || objDTO.getProduit().getId() == null) {
+            throw new IllegalArgumentException("L'id du produit est requis pour ajouter un commentaire");
+        }
+
         objDTO.setIdUserCreation(1L);
         objDTO.setIdUserModification(1L);
         CommentaireProduit commentaireProduit = commentaireProduitMapper.toEntity(objDTO);
 
-        Produit produit=commentaireProduit.getProduit();
-        produit.getCommentaires().add(commentaireProduit);
-        Produit addedProduit= srvProduit.ajouterProduit(produit).block();
-        CommentaireProduit addedCommentaireProduit= new CommentaireProduit(); // Blocking call to add the product// Set to null for now, can be populated with actual return status if needed
-        return ResponseEntity.ok(commentaireProduit);
+        Produit produit = srvProduit.getProduitById(objDTO.getProduit().getId()).block();
+        if (produit == null) {
+            throw new IllegalArgumentException("Produit introuvable avec id: " + objDTO.getProduit().getId());
+        }
+
+        commentaireProduit.setProduit(produit);
+        CommentaireProduit addedCommentaireProduit = srvCommentaireProduit.saveCommentaireProduit(commentaireProduit).block();
+        return ResponseEntity.ok(addedCommentaireProduit);
     }
 
     @PostMapping(value = "/modifierCommentaire")

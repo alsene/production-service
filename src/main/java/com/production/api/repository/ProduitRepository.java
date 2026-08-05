@@ -30,16 +30,16 @@ public interface ProduitRepository extends JpaRepository<Produit, Long> {
      * @param qualite the product name pattern (using LIKE)
      * @return List of matching Produit
      */
-    @Query("SELECT a FROM Produit a WHERE a.qualite =:qualite")
+    @Query("SELECT DISTINCT a FROM Produit a LEFT JOIN FETCH a.commentaires WHERE a.qualite =:qualite")
     Produit findByQualite(String qualite);
 
-    @Query("SELECT a FROM Produit a WHERE a.qualite =:qualite")
+    @Query("SELECT DISTINCT a FROM Produit a LEFT JOIN FETCH a.commentaires WHERE a.qualite =:qualite")
     List<Produit> findAllProduitsByQualite(String qualite);
 
-    @Query("SELECT a FROM Produit a WHERE a.encours =:encours")
+    @Query("SELECT DISTINCT a FROM Produit a LEFT JOIN FETCH a.commentaires WHERE a.encours =:encours")
     List<Produit> findAllProduitsByEncours(Boolean encours);
 
-    @Query("SELECT a FROM Produit a WHERE a.code =:code")
+    @Query("SELECT DISTINCT a FROM Produit a LEFT JOIN FETCH a.commentaires WHERE a.code =:code")
     Produit findProduitByCode(String code);
 }
 

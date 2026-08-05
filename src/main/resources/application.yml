@@ -30,7 +30,7 @@ security:
   jwt:
     # Cle base64 de 32+ octets pour HS256.
     secret: bXlfc3VwZXJfc2VjcmV0X2tleV9mb3JfcHJvZHVjdGlvbl9zZXJ2aWNlXzIwMjY=
-    expiration-ms: 8640000000
+    expiration-ms: 180000
     # Refresh token expiration: 7 jours
     refresh-expiration-ms: 604800000
 

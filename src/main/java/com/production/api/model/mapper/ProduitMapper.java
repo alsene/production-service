@@ -21,6 +21,7 @@ public interface ProduitMapper {
     @Mapping(ignore = true, target = "id")
     ProduitDTO toDtoForUpdate(Produit produit);
 
+    @Mapping(target = "commentaires", ignore = true)
     void updateProduitFromDto(ProduitDTO source, @MappingTarget Produit destination);
 
 }
