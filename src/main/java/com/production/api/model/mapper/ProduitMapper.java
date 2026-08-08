@@ -12,16 +12,16 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface ProduitMapper {
 
     @Mapping(ignore = true, target = "id")
-    Produit toEntity(ProduitDTO produitDTO);
+    Produit toEntity(ProduitDTO objDTO);
 
-    Produit toEntityForUpdate(ProduitDTO produitDTO);
+    Produit toEntityForUpdate(ProduitDTO objDTO);
 
-    ProduitDTO toDto(Produit produit);
+    ProduitDTO toDto(Produit obj);
 
     @Mapping(ignore = true, target = "id")
-    ProduitDTO toDtoForUpdate(Produit produit);
+    ProduitDTO toDtoForUpdate(Produit obj);
 
     @Mapping(target = "commentaires", ignore = true)
-    void updateProduitFromDto(ProduitDTO source, @MappingTarget Produit destination);
+    void updateObjFromDto(ProduitDTO source, @MappingTarget Produit destination);
 
 }

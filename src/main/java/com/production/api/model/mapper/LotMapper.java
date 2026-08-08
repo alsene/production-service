@@ -1,26 +1,26 @@
 package com.production.api.model.mapper;
 
 
-import com.production.api.model.Profil;
-import com.production.api.model.dto.ProfilDTO;
+import com.production.api.model.Lot;
+import com.production.api.model.dto.LotDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface ProfilMapper {
+public interface LotMapper {
 
     @Mapping(ignore = true, target = "id")
-    Profil toEntity(ProfilDTO objDTO);
+    Lot toEntity(LotDTO objDTO);
 
-    Profil toEntityForUpdate(ProfilDTO objDTO);
+    Lot toEntityForUpdate(LotDTO objDTO);
 
     @Mapping(ignore = true, target = "id")
-    ProfilDTO toDto(Profil obj);
+    LotDTO toDto(Lot obj);
 
-    ProfilDTO toDtoForUpdate(Profil obj);
+    LotDTO toDtoForUpdate(Lot obj);
 
-    void updateObjFromDto(ProfilDTO source, @MappingTarget Profil destination);
+    void updateObjFromDto(LotDTO source, @MappingTarget Lot destination);
 
 }

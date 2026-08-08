@@ -81,7 +81,7 @@ public class SrvProfil {
             }
 
             // Utiliser le mapper pour copier les champs non-null
-            profilMapper.updateProfilFromDto(profilDTO, profExistant);
+            profilMapper.updateObjFromDto(profilDTO, profExistant);
             profExistant.setDateModification(new Date());
 
             profilRepository.save(profExistant);

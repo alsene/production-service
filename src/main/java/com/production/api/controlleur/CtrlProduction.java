@@ -1,17 +1,33 @@
 package com.production.api.controlleur;
 
 import com.production.api.model.CommentaireProduit;
+import com.production.api.model.Client;
+import com.production.api.model.Lot;
+import com.production.api.model.Silo;
+import com.production.api.model.TypeProduit;
 import com.production.api.model.Utilisateur;
 import com.production.api.model.dto.CommentaireProduitDTO;
+import com.production.api.model.dto.ClientDTO;
+import com.production.api.model.dto.LotDTO;
+import com.production.api.model.dto.SiloDTO;
+import com.production.api.model.dto.TypeProduitDTO;
 import com.production.api.model.dto.UtilisateurDTO;
 import com.production.api.model.mapper.CommentaireProduitMapper;
+import com.production.api.model.mapper.ClientMapper;
+import com.production.api.model.mapper.LotMapper;
 import com.production.api.model.mapper.ProduitMapper;
+import com.production.api.model.mapper.SiloMapper;
+import com.production.api.model.mapper.TypeProduitMapper;
 import com.production.api.model.Produit;
 import com.production.api.model.ResponseProduction;
 import com.production.api.model.dto.ProduitDTO;
 import com.production.api.service.FacadeProductionService;
 import com.production.api.service.SrvCommentaireProduit;
+import com.production.api.service.SrvClient;
+import com.production.api.service.SrvLot;
 import com.production.api.service.SrvProduit;
+import com.production.api.service.SrvSilo;
+import com.production.api.service.SrvTypeProduit;
 import com.production.api.util.Qualite;
 import com.production.api.util.Retour;
 import lombok.RequiredArgsConstructor;
@@ -32,9 +48,17 @@ import java.util.List;
 public class CtrlProduction {
     private final SrvProduit srvProduit;
     private final SrvCommentaireProduit srvCommentaireProduit;
+    private final SrvLot srvLot;
+    private final SrvTypeProduit srvTypeProduit;
+    private final SrvSilo srvSilo;
+    private final SrvClient srvClient;
     private final FacadeProductionService facadeProductionService;
     private final ProduitMapper produitMapper;
     private final CommentaireProduitMapper commentaireProduitMapper;
+    private final LotMapper lotMapper;
+    private final TypeProduitMapper typeProduitMapper;
+    private final SiloMapper siloMapper;
+    private final ClientMapper clientMapper;
 
 
     // Endpoint that returns data directly (used by ClientProduit via WebClient to avoid infinite loop)
@@ -125,6 +149,138 @@ public class CtrlProduction {
         // Assuming there's a method to add a product
         CommentaireProduit updatedCommentaireProduit= srvCommentaireProduit.modifierCommentaireProduit(objDTO).block(); // Blocking call to add the product// Set to null for now, can be populated with actual return status if needed
         return ResponseEntity.ok(updatedCommentaireProduit);
+    }
+
+    @PostMapping(value = "/ajouterLot")
+    public ResponseEntity<Lot> ajouterLot(@RequestBody LotDTO lotDTO){
+        log.info("POST /api/production/endpoint/produit/v1/ajouterLot called");
+        Lot lot = lotMapper.toEntity(lotDTO);
+        lot.setIdUserCreation(1L);
+        lot.setIdUserModification(1L);
+        Lot addedLot = srvLot.saveLot(lot).block();
+        return ResponseEntity.ok(addedLot);
+    }
+
+    @PostMapping(value = "/modifierLot")
+    public ResponseEntity<Lot> modifierLot(@RequestBody LotDTO lotDTO){
+        log.info("POST /api/production/endpoint/produit/v1/modifierLot called");
+        Lot lot = lotMapper.toEntityForUpdate(lotDTO);
+        lot.setIdUserModification(1L);
+        Lot updatedLot = srvLot.modifierLot(lot).block();
+        return ResponseEntity.ok(updatedLot);
+    }
+
+    @PostMapping(value = "/supprimerLot")
+    public ResponseEntity<Void> supprimerLot(@RequestBody LotDTO lotDTO){
+        log.info("POST /api/production/endpoint/produit/v1/supprimerLot called");
+        srvLot.supprimerLot(lotDTO.getId()).block();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/obtenirLots")
+    public ResponseEntity<List<Lot>> obtenirLots(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirLots called");
+        List<Lot> lots = srvLot.getAllLots().block();
+        return ResponseEntity.ok(lots);
+    }
+
+    @PostMapping(value = "/ajouterTypeProduit")
+    public ResponseEntity<TypeProduit> ajouterTypeProduit(@RequestBody TypeProduitDTO typeProduitDTO){
+        log.info("POST /api/production/endpoint/produit/v1/ajouterTypeProduit called");
+        TypeProduit typeProduit = typeProduitMapper.toEntity(typeProduitDTO);
+        typeProduit.setIdUserCreation(1L);
+        typeProduit.setIdUserModification(1L);
+        TypeProduit addedTypeProduit = srvTypeProduit.saveTypeProduit(typeProduit).block();
+        return ResponseEntity.ok(addedTypeProduit);
+    }
+
+    @PostMapping(value = "/modifierTypeProduit")
+    public ResponseEntity<TypeProduit> modifierTypeProduit(@RequestBody TypeProduitDTO typeProduitDTO){
+        log.info("POST /api/production/endpoint/produit/v1/modifierTypeProduit called");
+        TypeProduit typeProduit = typeProduitMapper.toEntityForUpdate(typeProduitDTO);
+        typeProduit.setIdUserModification(1L);
+        TypeProduit updatedTypeProduit = srvTypeProduit.modifierTypeProduit(typeProduit).block();
+        return ResponseEntity.ok(updatedTypeProduit);
+    }
+
+    @PostMapping(value = "/supprimerTypeProduit")
+    public ResponseEntity<Void> supprimerTypeProduit(@RequestBody TypeProduitDTO typeProduitDTO){
+        log.info("POST /api/production/endpoint/produit/v1/supprimerTypeProduit called");
+        srvTypeProduit.supprimerTypeProduit(typeProduitDTO.getId()).block();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/obtenirTypeProduits")
+    public ResponseEntity<List<TypeProduit>> obtenirTypeProduits(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirTypeProduits called");
+        List<TypeProduit> typeProduits = srvTypeProduit.getAllTypeProduits().block();
+        return ResponseEntity.ok(typeProduits);
+    }
+
+    @PostMapping(value = "/ajouterSilo")
+    public ResponseEntity<Silo> ajouterSilo(@RequestBody SiloDTO siloDTO){
+        log.info("POST /api/production/endpoint/produit/v1/ajouterSilo called");
+        Silo silo = siloMapper.toEntity(siloDTO);
+        silo.setIdUserCreation(1L);
+        silo.setIdUserModification(1L);
+        Silo addedSilo = srvSilo.saveSilo(silo).block();
+        return ResponseEntity.ok(addedSilo);
+    }
+
+    @PostMapping(value = "/modifierSilo")
+    public ResponseEntity<Silo> modifierSilo(@RequestBody SiloDTO siloDTO){
+        log.info("POST /api/production/endpoint/produit/v1/modifierSilo called");
+        Silo silo = siloMapper.toEntityForUpdate(siloDTO);
+        silo.setIdUserModification(1L);
+        Silo updatedSilo = srvSilo.modifierSilo(silo).block();
+        return ResponseEntity.ok(updatedSilo);
+    }
+
+    @PostMapping(value = "/supprimerSilo")
+    public ResponseEntity<Void> supprimerSilo(@RequestBody SiloDTO siloDTO){
+        log.info("POST /api/production/endpoint/produit/v1/supprimerSilo called");
+        srvSilo.supprimerSilo(siloDTO.getId()).block();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/obtenirSilos")
+    public ResponseEntity<List<Silo>> obtenirSilos(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirSilos called");
+        List<Silo> silos = srvSilo.getAllSilos().block();
+        return ResponseEntity.ok(silos);
+    }
+
+    @PostMapping(value = "/ajouterClient")
+    public ResponseEntity<Client> ajouterClient(@RequestBody ClientDTO clientDTO){
+        log.info("POST /api/production/endpoint/produit/v1/ajouterClient called");
+        Client client = clientMapper.toEntity(clientDTO);
+        client.setIdUserCreation(1L);
+        client.setIdUserModification(1L);
+        Client addedClient = srvClient.saveClient(client).block();
+        return ResponseEntity.ok(addedClient);
+    }
+
+    @PostMapping(value = "/modifierClient")
+    public ResponseEntity<Client> modifierClient(@RequestBody ClientDTO clientDTO){
+        log.info("POST /api/production/endpoint/produit/v1/modifierClient called");
+        Client client = clientMapper.toEntityForUpdate(clientDTO);
+        client.setIdUserModification(1L);
+        Client updatedClient = srvClient.modifierClient(client).block();
+        return ResponseEntity.ok(updatedClient);
+    }
+
+    @PostMapping(value = "/supprimerClient")
+    public ResponseEntity<Void> supprimerClient(@RequestBody ClientDTO clientDTO){
+        log.info("POST /api/production/endpoint/produit/v1/supprimerClient called");
+        srvClient.supprimerClient(clientDTO.getId()).block();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/obtenirClients")
+    public ResponseEntity<List<Client>> obtenirClients(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirClients called");
+        List<Client> clients = srvClient.getAllClients().block();
+        return ResponseEntity.ok(clients);
     }
 
     @PostMapping(value = "/supprimerCommentaire")

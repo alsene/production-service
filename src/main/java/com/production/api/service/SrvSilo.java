@@ -33,6 +33,31 @@ public class SrvSilo {
         });
     }
 
+    public Mono<Silo> modifierSilo(Silo silo) {
+        return Mono.fromCallable(() -> {
+            if (silo.getId() == null) {
+                throw new IllegalArgumentException("L'id du silo est requis pour la modification");
+            }
+
+            Silo existingSilo = siloRepository.findById(silo.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Silo not found with id: " + silo.getId()));
+
+            existingSilo.setLibelle(silo.getLibelle());
+            existingSilo.setDescription(silo.getDescription());
+
+            return siloRepository.save(existingSilo);
+        });
+    }
+
+    public Mono<Void> supprimerSilo(Long id) {
+        return Mono.fromCallable(() -> {
+            Silo existingSilo = siloRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Silo not found with id: " + id));
+            siloRepository.deleteById(existingSilo.getId());
+            return null;
+        });
+    }
+
     /**
      * Get product by ID from database
      */

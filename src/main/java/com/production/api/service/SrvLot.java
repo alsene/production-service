@@ -33,6 +33,32 @@ public class SrvLot {
         });
     }
 
+    public Mono<Lot> modifierLot(Lot lot) {
+        return Mono.fromCallable(() -> {
+            if (lot.getId() == null) {
+                throw new IllegalArgumentException("L'id du lot est requis pour la modification");
+            }
+
+            Lot existingLot = lotRepository.findById(lot.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Lot not found with id: " + lot.getId()));
+
+            existingLot.setLibelle(lot.getLibelle());
+            existingLot.setDescription(lot.getDescription());
+            existingLot.setTypeLot(lot.getTypeLot());
+
+            return lotRepository.save(existingLot);
+        });
+    }
+
+    public Mono<Void> supprimerLot(Long id) {
+        return Mono.fromCallable(() -> {
+            Lot existingLot = lotRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Lot not found with id: " + id));
+            lotRepository.deleteById(existingLot.getId());
+            return null;
+        });
+    }
+
     /**
      * Get product by ID from database
      */

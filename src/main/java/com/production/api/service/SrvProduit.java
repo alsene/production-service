@@ -83,7 +83,7 @@ public class SrvProduit {
             }
 
             // Utiliser le mapper pour copier les champs non-null
-            produitMapper.updateProduitFromDto(produitDTO, produitExistant);
+            produitMapper.updateObjFromDto(produitDTO, produitExistant);
             produitExistant.setDateModification(new Date());
 
             produitRepository.save(produitExistant);

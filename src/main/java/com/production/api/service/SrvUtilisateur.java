@@ -97,7 +97,7 @@ public class SrvUtilisateur {
             }
 
             // Utiliser le mapper pour copier les champs non-null
-            utilisateurMapper.updateUtilisateurFromDto(utilisateurDTO, utilisateurExistant);
+            utilisateurMapper.updateObjFromDto(utilisateurDTO, utilisateurExistant);
 
             if (utilisateurExistant.getPassword() != null
                     && !utilisateurExistant.getPassword().isBlank()

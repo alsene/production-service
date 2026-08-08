@@ -33,6 +33,31 @@ public class SrvTypeProduit {
         });
     }
 
+    public Mono<TypeProduit> modifierTypeProduit(TypeProduit typeProduit) {
+        return Mono.fromCallable(() -> {
+            if (typeProduit.getId() == null) {
+                throw new IllegalArgumentException("L'id du type produit est requis pour la modification");
+            }
+
+            TypeProduit existingTypeProduit = typeProduitRepository.findById(typeProduit.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("TypeProduit not found with id: " + typeProduit.getId()));
+
+            existingTypeProduit.setLibelle(typeProduit.getLibelle());
+            existingTypeProduit.setDescription(typeProduit.getDescription());
+
+            return typeProduitRepository.save(existingTypeProduit);
+        });
+    }
+
+    public Mono<Void> supprimerTypeProduit(Long id) {
+        return Mono.fromCallable(() -> {
+            TypeProduit existingTypeProduit = typeProduitRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("TypeProduit not found with id: " + id));
+            typeProduitRepository.deleteById(existingTypeProduit.getId());
+            return null;
+        });
+    }
+
     /**
      * Get product by ID from database
      */

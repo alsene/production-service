@@ -58,7 +58,7 @@ public class SrvCommentaireProduit {
             }
 
             // Utiliser le mapper pour copier les champs non-null
-            commentaireProduiMapper.updateCommentaireProduitFromDto(objDTO, comProduitExistant);
+            commentaireProduiMapper.updateObjFromDto(objDTO, comProduitExistant);
             comProduitExistant.setDateModification(new Date());
 
             commentaireProduitRepository.save(comProduitExistant);

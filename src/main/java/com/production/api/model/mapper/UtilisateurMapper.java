@@ -11,14 +11,14 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UtilisateurMapper {
     @Mapping(ignore = true, target = "id")
-    Utilisateur toEntity(UtilisateurDTO UtilisateurDTO);
+    Utilisateur toEntity(UtilisateurDTO objDTO);
 
-    Utilisateur toEntityForUpdate(UtilisateurDTO UtilisateurDTO);
+    Utilisateur toEntityForUpdate(UtilisateurDTO objDTO);
 
     @Mapping(ignore = true, target = "id")
-    UtilisateurDTO toDto(Utilisateur Utilisateur);
+    UtilisateurDTO toDto(Utilisateur obj);
 
-    UtilisateurDTO toDtoForUpdate(Utilisateur Utilisateur);
-    void updateUtilisateurFromDto(UtilisateurDTO source, @MappingTarget Utilisateur destination);
+    UtilisateurDTO toDtoForUpdate(Utilisateur obj);
+    void updateObjFromDto(UtilisateurDTO source, @MappingTarget Utilisateur destination);
 
 }

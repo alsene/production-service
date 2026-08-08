@@ -34,6 +34,37 @@ public class SrvClient {
         });
     }
 
+    public Mono<Client> modifierClient(Client client) {
+        return Mono.fromCallable(() -> {
+            if (client.getId() == null) {
+                throw new IllegalArgumentException("L'id du client est requis pour la modification");
+            }
+
+            Client existingClient = ClientRepository.findById(client.getId())
+                    .orElseThrow(() -> new IllegalArgumentException("Client not found with id: " + client.getId()));
+
+            existingClient.setNom(client.getNom());
+            existingClient.setEmail(client.getEmail());
+            existingClient.setTelephone(client.getTelephone());
+            existingClient.setNumero(client.getNumero());
+            existingClient.setRue(client.getRue());
+            existingClient.setVille(client.getVille());
+            existingClient.setPays(client.getPays());
+            existingClient.setCodePostal(client.getCodePostal());
+
+            return ClientRepository.save(existingClient);
+        });
+    }
+
+    public Mono<Void> supprimerClient(Long id) {
+        return Mono.fromCallable(() -> {
+            Client existingClient = ClientRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("Client not found with id: " + id));
+            ClientRepository.deleteById(existingClient.getId());
+            return null;
+        });
+    }
+
     /**
      * Get product by ID from database
      */

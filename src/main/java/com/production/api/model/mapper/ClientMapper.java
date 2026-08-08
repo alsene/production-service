@@ -1,26 +1,25 @@
 package com.production.api.model.mapper;
 
-
-import com.production.api.model.Profil;
-import com.production.api.model.dto.ProfilDTO;
+import com.production.api.model.Client;
+import com.production.api.model.dto.ClientDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface ProfilMapper {
+public interface ClientMapper {
 
     @Mapping(ignore = true, target = "id")
-    Profil toEntity(ProfilDTO objDTO);
+    Client toEntity(ClientDTO objDTO);
 
-    Profil toEntityForUpdate(ProfilDTO objDTO);
+    Client toEntityForUpdate(ClientDTO objDTO);
 
     @Mapping(ignore = true, target = "id")
-    ProfilDTO toDto(Profil obj);
+    ClientDTO toDto(Client obj);
 
-    ProfilDTO toDtoForUpdate(Profil obj);
+    ClientDTO toDtoForUpdate(Client obj);
 
-    void updateObjFromDto(ProfilDTO source, @MappingTarget Profil destination);
-
+    void updateObjFromDto(ClientDTO source, @MappingTarget Client destination);
 }
+

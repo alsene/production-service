@@ -1,26 +1,26 @@
 package com.production.api.model.mapper;
 
 
-import com.production.api.model.Profil;
-import com.production.api.model.dto.ProfilDTO;
+import com.production.api.model.Silo;
+import com.production.api.model.dto.SiloDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-public interface ProfilMapper {
+public interface SiloMapper {
 
     @Mapping(ignore = true, target = "id")
-    Profil toEntity(ProfilDTO objDTO);
+    Silo toEntity(SiloDTO objDTO);
 
-    Profil toEntityForUpdate(ProfilDTO objDTO);
+    Silo toEntityForUpdate(SiloDTO objDTO);
 
     @Mapping(ignore = true, target = "id")
-    ProfilDTO toDto(Profil obj);
+    SiloDTO toDto(Silo obj);
 
-    ProfilDTO toDtoForUpdate(Profil obj);
+    SiloDTO toDtoForUpdate(Silo obj);
 
-    void updateObjFromDto(ProfilDTO source, @MappingTarget Profil destination);
+    void updateObjFromDto(SiloDTO source, @MappingTarget Silo destination);
 
 }
