@@ -10,7 +10,7 @@ import java.util.Arrays;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    private final String allowedOrigins="http://localhost:4200, https://sentechno-dev.com, https://www.sentechno-dev.com, https://www.sentechno-dev.com/login, https://api.sentechno-dev.com"; // Valeurs par défaut
+    private final String allowedOrigins="https://sentechno-dev.com, https://www.sentechno-dev.com, https://www.sentechno-dev.com/login, https://api.sentechno-dev.com"; // Valeurs par défaut
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -19,7 +19,6 @@ public class WebConfig implements WebMvcConfigurer {
                 .toArray(String[]::new);
 
         registry.addMapping("/api/**") // Applique à tous les endpoints
-                .allowedOrigins("http://localhost:4200", "https://sentechno-dev.com", "https://www.sentechno-dev.com")
                 .allowedOrigins(allowedOrigins) // URL de votre app Angular //Access-Control-Allow-Origin: https://example.com, http://localhost:4200, Header set Access-Control-Allow-Origin 'origin-list'
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
