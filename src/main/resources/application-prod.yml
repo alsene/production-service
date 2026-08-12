@@ -19,7 +19,7 @@ server:
   forward-headers-strategy: framework
 app:
   cors:
-    allowed-origins: ${APP_CORS_ALLOWED_ORIGINS}
+    allowed-origins: https://sentechno-dev.com, https://www.sentechno-dev.com, https://www.sentechno-dev.com/login, https://api.sentechno-dev.com
 
 client:
   service:
