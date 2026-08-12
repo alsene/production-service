@@ -151,6 +151,22 @@ public class CtrlProduction {
         return ResponseEntity.ok(updatedCommentaireProduit);
     }
 
+    @PostMapping(value = "/supprimerCommentaire")
+    public ResponseEntity<Void> supprimerCommentaire(@RequestBody CommentaireProduitDTO objDTO){
+        log.info("DELETE /api/production/endpoint/produit/v1/supprimerCommentaire called");
+        // Assuming there's a method to delete a product
+        srvCommentaireProduit.supprimerCommentaireProduit(objDTO.getId()).block(); // Blocking call to delete the product
+        // Set to null for now, can be populated with actual return status if needed
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/obtenirLots")
+    public ResponseEntity<List<Lot>> obtenirLots(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirLots called");
+        List<Lot> lots = srvLot.getAllLots().block();
+        return ResponseEntity.ok(lots);
+    }
+
     @PostMapping(value = "/ajouterLot")
     public ResponseEntity<Lot> ajouterLot(@RequestBody LotDTO lotDTO){
         log.info("POST /api/production/endpoint/produit/v1/ajouterLot called");
@@ -177,11 +193,11 @@ public class CtrlProduction {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/obtenirLots")
-    public ResponseEntity<List<Lot>> obtenirLots(){
-        log.info("GET /api/production/endpoint/produit/v1/obtenirLots called");
-        List<Lot> lots = srvLot.getAllLots().block();
-        return ResponseEntity.ok(lots);
+    @GetMapping(value = "/obtenirTypeProduits")
+    public ResponseEntity<List<TypeProduit>> obtenirTypeProduits(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirTypeProduits called");
+        List<TypeProduit> typeProduits = srvTypeProduit.getAllTypeProduits().block();
+        return ResponseEntity.ok(typeProduits);
     }
 
     @PostMapping(value = "/ajouterTypeProduit")
@@ -210,11 +226,11 @@ public class CtrlProduction {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/obtenirTypeProduits")
-    public ResponseEntity<List<TypeProduit>> obtenirTypeProduits(){
-        log.info("GET /api/production/endpoint/produit/v1/obtenirTypeProduits called");
-        List<TypeProduit> typeProduits = srvTypeProduit.getAllTypeProduits().block();
-        return ResponseEntity.ok(typeProduits);
+    @GetMapping(value = "/obtenirSilos")
+    public ResponseEntity<List<Silo>> obtenirSilos(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirSilos called");
+        List<Silo> silos = srvSilo.getAllSilos().block();
+        return ResponseEntity.ok(silos);
     }
 
     @PostMapping(value = "/ajouterSilo")
@@ -243,11 +259,11 @@ public class CtrlProduction {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/obtenirSilos")
-    public ResponseEntity<List<Silo>> obtenirSilos(){
-        log.info("GET /api/production/endpoint/produit/v1/obtenirSilos called");
-        List<Silo> silos = srvSilo.getAllSilos().block();
-        return ResponseEntity.ok(silos);
+    @GetMapping(value = "/obtenirClients")
+    public ResponseEntity<List<Client>> obtenirClients(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirClients called");
+        List<Client> clients = srvClient.getAllClients().block();
+        return ResponseEntity.ok(clients);
     }
 
     @PostMapping(value = "/ajouterClient")
@@ -273,22 +289,6 @@ public class CtrlProduction {
     public ResponseEntity<Void> supprimerClient(@RequestBody ClientDTO clientDTO){
         log.info("POST /api/production/endpoint/produit/v1/supprimerClient called");
         srvClient.supprimerClient(clientDTO.getId()).block();
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping(value = "/obtenirClients")
-    public ResponseEntity<List<Client>> obtenirClients(){
-        log.info("GET /api/production/endpoint/produit/v1/obtenirClients called");
-        List<Client> clients = srvClient.getAllClients().block();
-        return ResponseEntity.ok(clients);
-    }
-
-    @PostMapping(value = "/supprimerCommentaire")
-    public ResponseEntity<Void> supprimerCommentaire(@RequestBody CommentaireProduitDTO objDTO){
-        log.info("DELETE /api/production/endpoint/produit/v1/supprimerCommentaire called");
-        // Assuming there's a method to delete a product
-        srvCommentaireProduit.supprimerCommentaireProduit(objDTO.getId()).block(); // Blocking call to delete the product
-        // Set to null for now, can be populated with actual return status if needed
         return ResponseEntity.ok().build();
     }
 }
