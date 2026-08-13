@@ -39,3 +39,8 @@ security:
     # Refresh token expiration: 7 jours
     refresh-expiration-ms: 604800000
 
+logging:
+  level:
+    # Les client abort (socket ferme cote navigateur/proxy) ne sont pas des erreurs serveur critiques.
+    org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver: ERROR
+
