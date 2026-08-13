@@ -98,6 +98,10 @@ public class CtrlProduction {
         produitDTO.setIdUserCreation(1L);
         produitDTO.setIdUserModification(1L);
         produitDTO.setEncours(Boolean.TRUE);
+        produitDTO.setExpedier(Boolean.FALSE);
+        produitDTO.setArecycler(Boolean.FALSE);
+        produitDTO.setFulmine(Boolean.FALSE);
+        produitDTO.setConforme(Boolean.FALSE);
         Produit produit = produitMapper.toEntity(produitDTO);
         // Assuming there's a method to add a product
         Produit addedProduit= srvProduit.ajouterProduit(produit).block(); // Blocking call to add the product
