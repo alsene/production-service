@@ -20,5 +20,5 @@
 package com.production.api.util;
 
 public enum TypeLot {
-    LOT_PRODUIT, LOT_BIG_BAG;
+    PRODUIT, BIG_BAG;
 }
