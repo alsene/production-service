@@ -14,16 +14,16 @@ public interface LotRepository extends JpaRepository<Lot, Long> {
     
     /**
      * Find product by name
-     * @param libelle the product name
+     * @param numeroProduction the product name
      * @return Optional containing the Lot if found
      */
-    Optional<Lot> findBylibelle(String libelle);
+    Optional<Lot> findByNumeroProduction(String numeroProduction);
     
     /**
      * Find all products by name pattern
-     * @param libelle the product name pattern (using LIKE)
+     * @param numeroProduction the product name pattern (using LIKE)
      * @return List of matching Lot
      */
-    List<Lot> findBylibelleContainingIgnoreCase(String libelle);
+    List<Lot> findByNumeroProductionContainingIgnoreCase(String numeroProduction);
 }
 

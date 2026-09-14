@@ -1,8 +1,10 @@
 package com.production.api.repository;
 
+import com.production.api.model.CommentaireProduit;
 import com.production.api.model.Lot;
 import com.production.api.model.TypeProduit;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -16,13 +18,14 @@ public interface TypeProduitRepository extends JpaRepository<TypeProduit, Long> 
      * @param libelle the product name
      * @return Optional containing the Lot if found
      */
-    Optional<Lot> findBylibelle(String libelle);
+    Optional<TypeProduit> findBylibelle(String libelle);
     
     /**
      * Find all products by name pattern
      * @param libelle the product name pattern (using LIKE)
      * @return List of matching Lot
      */
-    List<Lot> findBylibelleContainingIgnoreCase(String libelle);
+    List<TypeProduit> findBylibelleContainingIgnoreCase(String libelle);
+
 }
 

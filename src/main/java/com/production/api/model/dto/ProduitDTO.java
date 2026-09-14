@@ -1,6 +1,7 @@
 package com.production.api.model.dto;
 
 import com.production.api.model.*;
+import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -30,6 +31,8 @@ public class ProduitDTO extends AbstractDTO {
 
     private TypeProduit typeProduit;
 
+    private PoidsProduit poidsProduit;
+
     private String qualite;
 
     private Boolean fulmine;
@@ -41,6 +44,8 @@ public class ProduitDTO extends AbstractDTO {
     private Boolean arecycler;
 
     private Boolean encours;
+
+    private String numero;
 
     private List<CommentaireProduit> commentaires= new ArrayList<>();
 

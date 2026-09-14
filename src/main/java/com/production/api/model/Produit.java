@@ -1,16 +1,12 @@
 package com.production.api.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.production.api.util.Qualite;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -31,7 +27,10 @@ public class Produit extends AbstractEntity{
     @Column(name = "quantite", nullable = false)
     private BigDecimal quantite;
 
-    @Column(name = "code", length = 20, nullable = true)
+    @Column(name = "numero", length = 20)
+    private String numero;
+
+    @Column(name = "code", length = 20)
     private String code;
 
     @ManyToOne
@@ -57,6 +56,10 @@ public class Produit extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "typeProduit_id", nullable = false)
     private TypeProduit typeProduit;
+
+    @ManyToOne
+    @JoinColumn(name = "poidsproduit_id"/*, nullable = false*/)
+    private PoidsProduit poidsProduit;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "qualite", length = 20, nullable = false)

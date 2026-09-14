@@ -1,5 +1,6 @@
 package com.production.api.model;
 
+import com.production.api.util.TypeStation;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,13 +8,13 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "silo")
+@Table(name = "station")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class Silo extends AbstractEntity{
-
+public class Station extends AbstractEntity{
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,6 +22,10 @@ public class Silo extends AbstractEntity{
     @Column(name = "libelle", length = 25, nullable = false)
     private String libelle;
 
-    @Column(name = "description", nullable = false)
-    private String description;
+    @Column(name = "type_station", length = 25, nullable = true)
+    @Enumerated(EnumType.STRING)
+    private TypeStation typeStation;
+
+
+
 }

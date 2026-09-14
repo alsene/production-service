@@ -19,11 +19,11 @@ public class Lot extends AbstractEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "libelle", length = 25, nullable = false)
-    private String libelle;
+    @Column(name = "numero_production", length = 25/*, nullable = false*/)
+    private String numeroProduction;
 
-    @Column(name = "description", length = 255, nullable = false)
-    private String description;
+    @Column(name = "annee_production", length = 5/*, nullable = false*/)
+    private String anneeProduction;
 
     @Column(name = "type_lot", length = 25, nullable = true)
     @Enumerated(EnumType.STRING)

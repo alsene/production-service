@@ -30,6 +30,8 @@ public class ResponseProduction {
     private List<Utilisateur> operateurs;
     private List<Utilisateur> listQA;
     private List<String> qualites;
+    private List<Station> stations;
+    private List<PoidsProduit> poidsProduits;
     private Retour retour;
     private Boolean souvenirAppareil;
 }

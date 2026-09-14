@@ -42,8 +42,8 @@ public class SrvLot {
             Lot existingLot = lotRepository.findById(lot.getId())
                     .orElseThrow(() -> new IllegalArgumentException("Lot not found with id: " + lot.getId()));
 
-            existingLot.setLibelle(lot.getLibelle());
-            existingLot.setDescription(lot.getDescription());
+            existingLot.setNumeroProduction(lot.getNumeroProduction());
+            existingLot.setAnneeProduction(lot.getAnneeProduction());
             existingLot.setTypeLot(lot.getTypeLot());
 
             return lotRepository.save(existingLot);

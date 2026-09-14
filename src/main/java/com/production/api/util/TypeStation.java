@@ -19,6 +19,6 @@
  */
 package com.production.api.util;
 
-public enum TypeLot {
+public enum TypeStation {
     PRODUIT, BIG_BAG, SHIFT;
 }

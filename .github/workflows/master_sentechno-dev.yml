@@ -52,6 +52,14 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3184F104C8B141EDB1CB4AFEB021F175 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_C683D123004B4FD386FE02F11CF31EF5 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_0616AF35EABA41E8A8C83B7B3FB9E56A }}
+      - name: Configure Spring Profile
+        uses: azure/cli@v2
+        with:
+          inlineScript: |
+            az webapp config appsettings set \
+              --resource-group sentechno_productiom_service \
+              --name sentechno-dev \
+              --settings SPRING_PROFILES_ACTIVE=prod
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp

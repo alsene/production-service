@@ -1,5 +1,6 @@
 package com.production.api.service;
 
+import com.production.api.model.CommentaireProduit;
 import com.production.api.model.TypeProduit;
 import com.production.api.repository.TypeProduitRepository;
 import lombok.RequiredArgsConstructor;

@@ -22,6 +22,8 @@ public class FacadeProductionService {
     private final SrvOperateur srvOperateur;
     private final SrvClient srvClient;
     private final SrvUtilisateur srvUtilisateur;
+    private final SrvStation srvStation;
+    private final SrvPoidsProduit srvPoidsProduit;
 
     public Mono<Mono<ResponseProduction>> obtenirPayloadProduction(String encours) {
         return Mono.fromCallable(() -> {
@@ -34,12 +36,14 @@ public class FacadeProductionService {
             Mono<List<Silo>> silosMono = srvSilo.getAllSilos();
             Mono<List<TypeProduit>> typesProduitMono = srvTypeProduit.getAllTypeProduits();
             Mono<List<Utilisateur>> listeQAMono = srvUtilisateur.findAssuranceQualite();
-            return extractedProduction(produitsMono, clientsMono, silosMono, lotsMono, typesProduitMono, listeQAMono);
+            Mono<List<Station>> stationsMono = srvStation.getAllStations();
+            Mono<List<PoidsProduit>> poidsProduitMono = srvPoidsProduit.getAllPoidsProduits();
+            return extractedProduction(produitsMono, clientsMono, silosMono, lotsMono, typesProduitMono, listeQAMono, stationsMono, poidsProduitMono);
         });
     }
 
-    private Mono<ResponseProduction> extractedProduction( Mono<List<Produit>> produitsMono, Mono<List<Client>> clientsMono, Mono<List<Silo>> silosMono, Mono<List<Lot>> lotsMono, Mono<List<TypeProduit>> typesProduitMono, Mono<List<Utilisateur>> listeQAMono) {
-        return Mono.zip(produitsMono, clientsMono, silosMono, lotsMono, typesProduitMono, listeQAMono)
+    private Mono<ResponseProduction> extractedProduction( Mono<List<Produit>> produitsMono, Mono<List<Client>> clientsMono, Mono<List<Silo>> silosMono, Mono<List<Lot>> lotsMono, Mono<List<TypeProduit>> typesProduitMono, Mono<List<Utilisateur>> listeQAMono, Mono<List<Station>> stationsMono, Mono<List<PoidsProduit>> poidsProduitMono) {
+        return Mono.zip(produitsMono, clientsMono, silosMono, lotsMono, typesProduitMono, listeQAMono, stationsMono, poidsProduitMono)
                 .map(tuple -> {
                     List<Produit> produits = tuple.getT1();
                     List<Client> clients = tuple.getT2();
@@ -47,6 +51,8 @@ public class FacadeProductionService {
                     List<Lot> lots = tuple.getT4();
                     List<TypeProduit> typesProduits = tuple.getT5();
                     List<Utilisateur> listeQA = tuple.getT6();
+                    List<Station> listeStation = tuple.getT7();
+                    List<PoidsProduit> listePoidsProduit= tuple.getT8();
 
                     ResponseProduction response = new ResponseProduction();
                     response.setProduits(produits);
@@ -63,6 +69,8 @@ public class FacadeProductionService {
                     response.setSilos(silos);
                     response.setListQA(listeQA);
                     response.setTypeProduits(typesProduits);
+                    response.setStations(listeStation);
+                    response.setPoidsProduits(listePoidsProduit);
                     response.setRetour(Retour.builder().code("Succes").httpCode(200).build()); // Set to null for now, can be populated with actual return status if needed
                     response.setSouvenirAppareil(true); // Set souvenirAppareil based on client existence
 

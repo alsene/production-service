@@ -11,6 +11,9 @@ build/
 .factorypath
 .project
 .env
+hs_err_pid17736.log
+replay_pid17736.log
+production.env
 .settings
 .springBeans
 .sts4-cache

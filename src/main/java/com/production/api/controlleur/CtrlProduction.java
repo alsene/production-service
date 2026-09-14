@@ -3,20 +3,29 @@ package com.production.api.controlleur;
 import com.production.api.model.CommentaireProduit;
 import com.production.api.model.Client;
 import com.production.api.model.Lot;
+import com.production.api.model.PoidsProduit;
 import com.production.api.model.Silo;
+import com.production.api.model.SiloTypeProduit;
+import com.production.api.model.Station;
 import com.production.api.model.TypeProduit;
 import com.production.api.model.Utilisateur;
 import com.production.api.model.dto.CommentaireProduitDTO;
 import com.production.api.model.dto.ClientDTO;
 import com.production.api.model.dto.LotDTO;
+import com.production.api.model.dto.PoidsProduitDTO;
 import com.production.api.model.dto.SiloDTO;
+import com.production.api.model.dto.SiloTypeProduitDTO;
+import com.production.api.model.dto.StationDTO;
 import com.production.api.model.dto.TypeProduitDTO;
 import com.production.api.model.dto.UtilisateurDTO;
 import com.production.api.model.mapper.CommentaireProduitMapper;
 import com.production.api.model.mapper.ClientMapper;
 import com.production.api.model.mapper.LotMapper;
+import com.production.api.model.mapper.PoidsProduitMapper;
 import com.production.api.model.mapper.ProduitMapper;
 import com.production.api.model.mapper.SiloMapper;
+import com.production.api.model.mapper.SiloTypeProduitMapper;
+import com.production.api.model.mapper.StationMapper;
 import com.production.api.model.mapper.TypeProduitMapper;
 import com.production.api.model.Produit;
 import com.production.api.model.ResponseProduction;
@@ -25,19 +34,27 @@ import com.production.api.service.FacadeProductionService;
 import com.production.api.service.SrvCommentaireProduit;
 import com.production.api.service.SrvClient;
 import com.production.api.service.SrvLot;
+import com.production.api.service.SrvPoidsProduit;
 import com.production.api.service.SrvProduit;
+import com.production.api.service.SrvPdfProduction;
 import com.production.api.service.SrvSilo;
+import com.production.api.service.SrvSiloTypeProduit;
+import com.production.api.service.SrvStation;
 import com.production.api.service.SrvTypeProduit;
 import com.production.api.util.Qualite;
 import com.production.api.util.Retour;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -49,15 +66,22 @@ public class CtrlProduction {
     private final SrvProduit srvProduit;
     private final SrvCommentaireProduit srvCommentaireProduit;
     private final SrvLot srvLot;
+    private final SrvPoidsProduit srvPoidsProduit;
     private final SrvTypeProduit srvTypeProduit;
     private final SrvSilo srvSilo;
+    private final SrvSiloTypeProduit srvSiloTypeProduit;
+    private final SrvStation srvStation;
     private final SrvClient srvClient;
+    private final SrvPdfProduction srvPdfProduction;
     private final FacadeProductionService facadeProductionService;
     private final ProduitMapper produitMapper;
     private final CommentaireProduitMapper commentaireProduitMapper;
     private final LotMapper lotMapper;
+    private final PoidsProduitMapper poidsProduitMapper;
     private final TypeProduitMapper typeProduitMapper;
     private final SiloMapper siloMapper;
+    private final SiloTypeProduitMapper siloTypeProduitMapper;
+    private final StationMapper stationMapper;
     private final ClientMapper clientMapper;
 
 
@@ -77,14 +101,20 @@ public class CtrlProduction {
     @GetMapping(value = "/assurance-qualite/{encours}")
     public ResponseEntity<ResponseProduction> getProduitsForQualite(@PathVariable String  encours){
         log.info("GET /api/production/endpoint/produit/v1/assurance-qualite called");
-        Mono<Mono<ResponseProduction>> monoMono= facadeProductionService.obtenirPayloadProduction(encours);
-        ResponseProduction responseFromFacade = monoMono.flatMap(mono -> mono).block(); // Blocking call to get the response from the facade
-        List<String> qualites = List.of(Qualite.STANDARD.name(), Qualite.PREMIUM.name(), Qualite.EXCELLENCE.name());
-        if(responseFromFacade == null) {
-            responseFromFacade = new ResponseProduction(); // Create a new instance to avoid NullPointerException
+        try {
+            Mono<Mono<ResponseProduction>> monoMono= facadeProductionService.obtenirPayloadProduction(encours);
+            ResponseProduction responseFromFacade = monoMono.flatMap(mono -> mono).block(); // Blocking call to get the response from the facade
+            List<String> qualites = List.of(Qualite.STANDARD.name(), Qualite.PREMIUM.name(), Qualite.EXCELLENCE.name());
+            if(responseFromFacade == null) {
+                responseFromFacade = new ResponseProduction(); // Create a new instance to avoid NullPointerException
+            }
+            responseFromFacade.setQualites(qualites);
+            ResponseEntity<ResponseProduction> response= ResponseEntity.ok(responseFromFacade);
+            return response;
+        } catch (Exception e) {
+            log.info("GET /api/production/endpoint/produit/v1/assurance-qualite called", e.getCause());
+            throw new RuntimeException(e);
         }
-        responseFromFacade.setQualites(qualites);
-        return ResponseEntity.ok(responseFromFacade);
     }
 
     @PostMapping(value = "/ajouter")
@@ -270,6 +300,25 @@ public class CtrlProduction {
         return ResponseEntity.ok(clients);
     }
 
+    @GetMapping(value = "/impression/produits-encours/pdf")
+    public ResponseEntity<byte[]> imprimerProduitsEncoursPdf() {
+        log.info("GET /api/production/endpoint/produit/v1/impression/produits-encours/pdf called");
+
+        List<Produit> produitsEncours = srvProduit.findAllProduitsByEncours("true").block();
+        if (produitsEncours == null) {
+            produitsEncours = List.of();
+        }
+
+        byte[] pdfBytes = srvPdfProduction.genererPdfProduitsEncours(produitsEncours);
+        String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+        String fileName = "produits-encours-" + timestamp + ".pdf";
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .body(pdfBytes);
+    }
+
     @PostMapping(value = "/ajouterClient")
     public ResponseEntity<Client> ajouterClient(@RequestBody ClientDTO clientDTO){
         log.info("POST /api/production/endpoint/produit/v1/ajouterClient called");
@@ -293,6 +342,104 @@ public class CtrlProduction {
     public ResponseEntity<Void> supprimerClient(@RequestBody ClientDTO clientDTO){
         log.info("POST /api/production/endpoint/produit/v1/supprimerClient called");
         srvClient.supprimerClient(clientDTO.getId()).block();
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping(value = "/obtenirSiloTypeProduits")
+    public ResponseEntity<List<SiloTypeProduit>> obtenirSiloTypeProduits(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirSiloTypeProduits called");
+        List<SiloTypeProduit> siloTypeProduits = srvSiloTypeProduit.getAllSiloTypeProduits().block();
+        return ResponseEntity.ok(siloTypeProduits);
+    }
+
+    @PostMapping(value = "/ajouterSiloTypeProduit")
+    public ResponseEntity<SiloTypeProduit> ajouterSiloTypeProduit(@RequestBody SiloTypeProduitDTO siloTypeProduitDTO){
+        log.info("POST /api/production/endpoint/produit/v1/ajouterSiloTypeProduit called");
+        SiloTypeProduit siloTypeProduit = siloTypeProduitMapper.toEntity(siloTypeProduitDTO);
+        siloTypeProduit.setIdUserCreation(1L);
+        siloTypeProduit.setIdUserModification(1L);
+        SiloTypeProduit addedSiloTypeProduit = srvSiloTypeProduit.saveSiloTypeProduit(siloTypeProduit).block();
+        return ResponseEntity.ok(addedSiloTypeProduit);
+    }
+
+    @PostMapping(value = "/modifierSiloTypeProduit")
+    public ResponseEntity<SiloTypeProduit> modifierSiloTypeProduit(@RequestBody SiloTypeProduitDTO siloTypeProduitDTO){
+        log.info("POST /api/production/endpoint/produit/v1/modifierSiloTypeProduit called");
+        SiloTypeProduit siloTypeProduit = siloTypeProduitMapper.toEntityForUpdate(siloTypeProduitDTO);
+        siloTypeProduit.setIdUserModification(1L);
+        SiloTypeProduit updatedSiloTypeProduit = srvSiloTypeProduit.modifierSiloTypeProduit(siloTypeProduit).block();
+        return ResponseEntity.ok(updatedSiloTypeProduit);
+    }
+
+    @PostMapping(value = "/supprimerSiloTypeProduit")
+    public ResponseEntity<Void> supprimerSiloTypeProduit(@RequestBody SiloTypeProduitDTO siloTypeProduitDTO){
+        log.info("POST /api/production/endpoint/produit/v1/supprimerSiloTypeProduit called");
+        srvSiloTypeProduit.supprimerSiloTypeProduit(siloTypeProduitDTO.getId()).block();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/obtenirStations")
+    public ResponseEntity<List<Station>> obtenirStations(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirStations called");
+        List<Station> stations = srvStation.getAllStations().block();
+        return ResponseEntity.ok(stations);
+    }
+
+    @PostMapping(value = "/ajouterStation")
+    public ResponseEntity<Station> ajouterStation(@RequestBody StationDTO stationDTO){
+        log.info("POST /api/production/endpoint/produit/v1/ajouterStation called");
+        Station station = stationMapper.toEntity(stationDTO);
+        station.setIdUserCreation(1L);
+        station.setIdUserModification(1L);
+        Station addedStation = srvStation.saveStation(station).block();
+        return ResponseEntity.ok(addedStation);
+    }
+
+    @PostMapping(value = "/modifierStation")
+    public ResponseEntity<Station> modifierStation(@RequestBody StationDTO stationDTO){
+        log.info("POST /api/production/endpoint/produit/v1/modifierStation called");
+        Station station = stationMapper.toEntityForUpdate(stationDTO);
+        station.setIdUserModification(1L);
+        Station updatedStation = srvStation.modifierStation(station).block();
+        return ResponseEntity.ok(updatedStation);
+    }
+
+    @PostMapping(value = "/supprimerStation")
+    public ResponseEntity<Void> supprimerStation(@RequestBody StationDTO stationDTO){
+        log.info("POST /api/production/endpoint/produit/v1/supprimerStation called");
+        srvStation.supprimerStation(stationDTO.getId()).block();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/obtenirPoidsProduits")
+    public ResponseEntity<List<PoidsProduit>> obtenirPoidsProduits(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirPoidsProduits called");
+        List<PoidsProduit> poidsProduits = srvPoidsProduit.getAllPoidsProduits().block();
+        return ResponseEntity.ok(poidsProduits);
+    }
+
+    @PostMapping(value = "/ajouterPoidsProduit")
+    public ResponseEntity<PoidsProduit> ajouterPoidsProduit(@RequestBody PoidsProduitDTO poidsProduitDTO){
+        log.info("POST /api/production/endpoint/produit/v1/ajouterPoidsProduit called");
+        PoidsProduit poidsProduit = poidsProduitMapper.toEntity(poidsProduitDTO);
+        poidsProduit.setIdUserCreation(1L);
+        poidsProduit.setIdUserModification(1L);
+        PoidsProduit addedPoidsProduit = srvPoidsProduit.savePoidsProduit(poidsProduit).block();
+        return ResponseEntity.ok(addedPoidsProduit);
+    }
+
+    @PostMapping(value = "/modifierPoidsProduit")
+    public ResponseEntity<PoidsProduit> modifierPoidsProduit(@RequestBody PoidsProduitDTO poidsProduitDTO){
+        log.info("POST /api/production/endpoint/produit/v1/modifierPoidsProduit called");
+        PoidsProduit poidsProduit = poidsProduitMapper.toEntityForUpdate(poidsProduitDTO);
+        poidsProduit.setIdUserModification(1L);
+        PoidsProduit updatedPoidsProduit = srvPoidsProduit.modifierPoidsProduit(poidsProduit).block();
+        return ResponseEntity.ok(updatedPoidsProduit);
+    }
+
+    @PostMapping(value = "/supprimerPoidsProduit")
+    public ResponseEntity<Void> supprimerPoidsProduit(@RequestBody PoidsProduitDTO poidsProduitDTO){
+        log.info("POST /api/production/endpoint/produit/v1/supprimerPoidsProduit called");
+        srvPoidsProduit.supprimerPoidsProduit(poidsProduitDTO.getId()).block();
         return ResponseEntity.ok().build();
     }
 }
