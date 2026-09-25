@@ -2,19 +2,24 @@ package com.production.api.service;
 
 import com.production.api.model.Lot;
 import com.production.api.repository.LotRepository;
+import com.production.api.util.EnrichirLibelle;
+import com.production.api.util.JourJulien;
+import com.production.api.util.TypeLot;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class SrvLot {
     private final LotRepository lotRepository;
-    
+
     public Mono<Lot> getLot(){
         Lot lot = new Lot();
         log.info("Returning Lot: {}", lot);
@@ -27,6 +32,7 @@ public class SrvLot {
     public Mono<Lot> saveLot(Lot lot) {
         return Mono.fromCallable(() -> {
             log.info("Saving Lot to database: {}", lot);
+            EnrichirLibelle.libelleLot(lot);
             Lot saved = lotRepository.save(lot);
             log.info("Lot saved with id: {}", saved.getId());
             return saved;
@@ -45,6 +51,7 @@ public class SrvLot {
             existingLot.setNumeroProduction(lot.getNumeroProduction());
             existingLot.setAnneeProduction(lot.getAnneeProduction());
             existingLot.setTypeLot(lot.getTypeLot());
+            EnrichirLibelle.libelleLot(existingLot);
 
             return lotRepository.save(existingLot);
         });
@@ -65,8 +72,10 @@ public class SrvLot {
     public Mono<Lot>  getLotById(Long id) {
         return Mono.fromCallable(() -> {
             log.info("Fetching Lot with id: {}", id);
-            return lotRepository.findById(id)
+            Lot lot = lotRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("Lot not found with id: " + id));
+            EnrichirLibelle.libelleLot(lot);
+            return lot;
         });
     }
 
@@ -76,7 +85,9 @@ public class SrvLot {
     public Mono<List<Lot>> getAllLots() {
         return Mono.fromCallable(() -> {
             log.info("Fetching all Lots from database");
-            return lotRepository.findAll();
+            List<Lot> lots = lotRepository.findAll();
+            lots.forEach(EnrichirLibelle::libelleLot);
+            return lots;
         });
     }
 }

@@ -29,4 +29,6 @@ public class Lot extends AbstractEntity{
     @Enumerated(EnumType.STRING)
     private TypeLot typeLot;
 
+    @Transient
+    private String libelle;
 }

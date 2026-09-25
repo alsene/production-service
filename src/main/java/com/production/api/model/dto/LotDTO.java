@@ -11,5 +11,6 @@ public class LotDTO extends AbstractDTO {
     private Long id;
     private String numeroProduction;
     private String anneeProduction;
+    private String libelle;
     private TypeLot typeLot;
 }

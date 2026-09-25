@@ -1,48 +1,11 @@
 package com.production.api.controlleur;
 
-import com.production.api.model.CommentaireProduit;
-import com.production.api.model.Client;
-import com.production.api.model.Lot;
-import com.production.api.model.PoidsProduit;
-import com.production.api.model.Silo;
-import com.production.api.model.SiloTypeProduit;
-import com.production.api.model.Station;
-import com.production.api.model.TypeProduit;
-import com.production.api.model.Utilisateur;
-import com.production.api.model.dto.CommentaireProduitDTO;
-import com.production.api.model.dto.ClientDTO;
-import com.production.api.model.dto.LotDTO;
-import com.production.api.model.dto.PoidsProduitDTO;
-import com.production.api.model.dto.SiloDTO;
-import com.production.api.model.dto.SiloTypeProduitDTO;
-import com.production.api.model.dto.StationDTO;
-import com.production.api.model.dto.TypeProduitDTO;
-import com.production.api.model.dto.UtilisateurDTO;
-import com.production.api.model.mapper.CommentaireProduitMapper;
-import com.production.api.model.mapper.ClientMapper;
-import com.production.api.model.mapper.LotMapper;
-import com.production.api.model.mapper.PoidsProduitMapper;
-import com.production.api.model.mapper.ProduitMapper;
-import com.production.api.model.mapper.SiloMapper;
-import com.production.api.model.mapper.SiloTypeProduitMapper;
-import com.production.api.model.mapper.StationMapper;
-import com.production.api.model.mapper.TypeProduitMapper;
-import com.production.api.model.Produit;
-import com.production.api.model.ResponseProduction;
-import com.production.api.model.dto.ProduitDTO;
-import com.production.api.service.FacadeProductionService;
-import com.production.api.service.SrvCommentaireProduit;
-import com.production.api.service.SrvClient;
-import com.production.api.service.SrvLot;
-import com.production.api.service.SrvPoidsProduit;
-import com.production.api.service.SrvProduit;
-import com.production.api.service.SrvPdfProduction;
-import com.production.api.service.SrvSilo;
-import com.production.api.service.SrvSiloTypeProduit;
-import com.production.api.service.SrvStation;
-import com.production.api.service.SrvTypeProduit;
+import com.production.api.model.*;
+import com.production.api.model.dto.*;
+import com.production.api.model.mapper.*;
+import com.production.api.service.*;
+import com.production.api.util.JourJulien;
 import com.production.api.util.Qualite;
-import com.production.api.util.Retour;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -132,6 +95,7 @@ public class CtrlProduction {
         produitDTO.setArecycler(Boolean.FALSE);
         produitDTO.setFulmine(Boolean.FALSE);
         produitDTO.setConforme(Boolean.FALSE);
+        produitDTO.setJourJulien(JourJulien.getJourJulien());
         Produit produit = produitMapper.toEntity(produitDTO);
         // Assuming there's a method to add a product
         Produit addedProduit= srvProduit.ajouterProduit(produit).block(); // Blocking call to add the product
@@ -151,6 +115,7 @@ public class CtrlProduction {
     public ResponseEntity<Produit> modifierProduit(@RequestBody ProduitDTO produitDTO){
         log.info("POST /api/production/endpoint/produit/v1/modifier called");
         // Assuming there's a method to add a product
+        produitDTO.setJourJulien(JourJulien.getJourJulien());
         Produit updatedProduit= srvProduit.modifierProduit(produitDTO).block(); // Blocking call to add the product// Set to null for now, can be populated with actual return status if needed
         return ResponseEntity.ok(updatedProduit);
     }
@@ -348,6 +313,20 @@ public class CtrlProduction {
     public ResponseEntity<List<SiloTypeProduit>> obtenirSiloTypeProduits(){
         log.info("GET /api/production/endpoint/produit/v1/obtenirSiloTypeProduits called");
         List<SiloTypeProduit> siloTypeProduits = srvSiloTypeProduit.getAllSiloTypeProduits().block();
+        return ResponseEntity.ok(siloTypeProduits);
+    }
+
+    @GetMapping(value = "/findBySiloId")
+    public ResponseEntity<List<SiloTypeProduit>> findBySiloId(@RequestParam String siloId ){
+        log.info("GET /api/production/endpoint/produit/v1/findBySiloId called");
+        List<SiloTypeProduit> siloTypeProduits = srvSiloTypeProduit.findBySiloId(siloId).block();
+        return ResponseEntity.ok(siloTypeProduits);
+    }
+
+    @GetMapping(value = "/findByTypeProduitId/{typeProduitId}")
+    public ResponseEntity<List<SiloTypeProduit>> findByTypeProduitId(@PathVariable String typeProduitId){
+        log.info("GET /api/production/endpoint/produit/v1/findByTypeProduitId called");
+        List<SiloTypeProduit> siloTypeProduits = srvSiloTypeProduit.findByTypeProduitId(typeProduitId).block();
         return ResponseEntity.ok(siloTypeProduits);
     }
 

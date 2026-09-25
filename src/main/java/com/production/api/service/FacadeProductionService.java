@@ -53,12 +53,17 @@ public class FacadeProductionService {
                     List<Utilisateur> listeQA = tuple.getT6();
                     List<Station> listeStation = tuple.getT7();
                     List<PoidsProduit> listePoidsProduit= tuple.getT8();
-
+                    List<Lot> lotsBag = lots.stream()
+                            .filter(lot -> lot.getTypeLot() == TypeLot.BIG_BAG)
+                            .collect(Collectors.toList());
+                    List<Lot> lotsProduit = lots.stream()
+                            .filter(lot -> lot.getTypeLot() == TypeLot.PRODUIT)
+                            .collect(Collectors.toList());
                     ResponseProduction response = new ResponseProduction();
                     response.setProduits(produits);
                     response.setClients(clients);
-                    response.setLotBags(lots.stream().filter(lot -> lot.getTypeLot() == TypeLot.BIG_BAG).collect(Collectors.toList())); // Assuming lotBags is a field in ResponseProduction
-                    response.setLots(lots.stream().filter(lot -> lot.getTypeLot() == TypeLot.PRODUIT).collect(Collectors.toList()));
+                    response.setLotBags(lotsBag);
+                    response.setLots(lotsProduit);
                     response.setProduitsConforme(produits.stream().filter(produit -> Boolean.TRUE.equals(produit.getConforme()) && Boolean.TRUE.equals(produit.getEncours())).collect(Collectors.toList())); // Assuming lotBags is a field in ResponseProductiontion
                     response.setProduitsFulminer(produits.stream().filter(produit -> Boolean.TRUE.equals(produit.getFulmine()) && Boolean.TRUE.equals(produit.getEncours())).collect(Collectors.toList()));
                     response.setProduitsPourQualite(produits.stream().filter(produit -> Boolean.FALSE.equals(produit.getConforme()) && Boolean.TRUE.equals(produit.getEncours())).collect(Collectors.toList())); // Assuming lotBags is a field in ResponseProductiontion

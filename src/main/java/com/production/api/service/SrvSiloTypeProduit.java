@@ -2,6 +2,7 @@ package com.production.api.service;
 
 import com.production.api.model.SiloTypeProduit;
 import com.production.api.repository.SiloTypeProduitRepository;
+import com.production.api.util.EnrichirLibelle;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SrvSiloTypeProduit {
     private final SiloTypeProduitRepository siloTypeProduitRepository;
-
+    
     public Mono<SiloTypeProduit> getSiloTypeProduit() {
         SiloTypeProduit siloTypeProduit = new SiloTypeProduit();
         log.info("Returning SiloTypeProduit: {}", siloTypeProduit);
@@ -24,6 +25,7 @@ public class SrvSiloTypeProduit {
     public Mono<SiloTypeProduit> saveSiloTypeProduit(SiloTypeProduit siloTypeProduit) {
         return Mono.fromCallable(() -> {
             log.info("Saving SiloTypeProduit to database: {}", siloTypeProduit);
+            EnrichirLibelle.libelleSiloTypeProduit(siloTypeProduit);
             SiloTypeProduit saved = siloTypeProduitRepository.save(siloTypeProduit);
             log.info("SiloTypeProduit saved with id: {}", saved.getId());
             return saved;
@@ -42,6 +44,7 @@ public class SrvSiloTypeProduit {
             existing.setCodeProduit(siloTypeProduit.getCodeProduit());
             existing.setTypeProduit(siloTypeProduit.getTypeProduit());
             existing.setSilo(siloTypeProduit.getSilo());
+            EnrichirLibelle.libelleSiloTypeProduit(existing);
 
             return siloTypeProduitRepository.save(existing);
         });
@@ -59,15 +62,37 @@ public class SrvSiloTypeProduit {
     public Mono<SiloTypeProduit> getSiloTypeProduitById(Long id) {
         return Mono.fromCallable(() -> {
             log.info("Fetching SiloTypeProduit with id: {}", id);
-            return siloTypeProduitRepository.findById(id)
+            SiloTypeProduit siloTypeProduit = siloTypeProduitRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("SiloTypeProduit not found with id: " + id));
+            EnrichirLibelle.libelleSiloTypeProduit(siloTypeProduit);
+            return siloTypeProduit;
+        });
+    }
+
+    public Mono<List<SiloTypeProduit>> findBySiloId(String siloId) {
+        return Mono.fromCallable(() -> {
+            log.info("Fetching SiloTypeProduit with id: {}", siloId);
+            List<SiloTypeProduit> result = siloTypeProduitRepository.findBySiloId(Long.valueOf(siloId));
+            result.forEach(EnrichirLibelle::libelleSiloTypeProduit);
+            return result;
+        });
+    }
+
+    public Mono<List<SiloTypeProduit>> findByTypeProduitId(String typeProduitId) {
+        return Mono.fromCallable(() -> {
+            log.info("Fetching SiloTypeProduit with id: {}", typeProduitId);
+            List<SiloTypeProduit> result = siloTypeProduitRepository.findByTypeProduitId(Long.valueOf(typeProduitId));
+            result.forEach(EnrichirLibelle::libelleSiloTypeProduit);
+            return result;
         });
     }
 
     public Mono<List<SiloTypeProduit>> getAllSiloTypeProduits() {
         return Mono.fromCallable(() -> {
             log.info("Fetching all SiloTypeProduits from database");
-            return siloTypeProduitRepository.findAll();
+            List<SiloTypeProduit> result = siloTypeProduitRepository.findAll();
+            result.forEach(EnrichirLibelle::libelleSiloTypeProduit);
+            return result;
         });
     }
 }

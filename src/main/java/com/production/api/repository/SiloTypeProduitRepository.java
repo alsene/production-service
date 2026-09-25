@@ -1,7 +1,9 @@
 package com.production.api.repository;
 
+import com.production.api.model.ProfilUtilisateur;
 import com.production.api.model.SiloTypeProduit;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,5 +15,11 @@ public interface SiloTypeProduitRepository extends JpaRepository<SiloTypeProduit
     Optional<SiloTypeProduit> findByCodeProduit(String codeProduit);
 
     List<SiloTypeProduit> findByCodeProduitContainingIgnoreCase(String codeProduit);
+
+    @Query("SELECT stp FROM SiloTypeProduit stp WHERE stp.silo.id = :siloId")
+    List<SiloTypeProduit> findBySiloId(Long siloId);
+
+    @Query("SELECT stp FROM SiloTypeProduit stp WHERE stp.typeProduit.id = :typeProduitId")
+    List<SiloTypeProduit> findByTypeProduitId(Long typeProduitId);
 }
 

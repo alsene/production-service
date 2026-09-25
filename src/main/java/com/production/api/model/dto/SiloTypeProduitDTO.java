@@ -12,5 +12,6 @@ public class SiloTypeProduitDTO extends AbstractDTO {
     private String codeProduit;
     private TypeProduit typeProduit;
     private Silo silo;
+    private String libelle;
 }
 

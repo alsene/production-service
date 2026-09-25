@@ -28,4 +28,7 @@ public class SiloTypeProduit extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "silo_id", nullable = false)
     private Silo silo;
+
+    @Transient
+    private String libelle;
 }

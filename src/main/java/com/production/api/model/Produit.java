@@ -24,7 +24,7 @@ public class Produit extends AbstractEntity{
     @Column(name = "nom", length = 36, nullable = false)
     private String nom;
 
-    @Column(name = "quantite", nullable = false)
+    @Column(name = "quantite"/*, nullable = false*/)
     private BigDecimal quantite;
 
     @Column(name = "numero", length = 20)
@@ -32,6 +32,9 @@ public class Produit extends AbstractEntity{
 
     @Column(name = "code", length = 20)
     private String code;
+
+    @Column(name = "jour_julien", length = 3)
+    private String jourJulien;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
@@ -54,8 +57,16 @@ public class Produit extends AbstractEntity{
     private Silo silo;
 
     @ManyToOne
-    @JoinColumn(name = "typeProduit_id", nullable = false)
+    @JoinColumn(name = "typeProduit_id"/*, nullable = false*/)
     private TypeProduit typeProduit;
+
+    @ManyToOne
+    @JoinColumn(name = "station_id"/*, nullable = false*/)
+    private Station station;
+
+    @ManyToOne
+    @JoinColumn(name = "silotypeproduit_id"/*, nullable = false*/)
+    private SiloTypeProduit siloTypeProduit;
 
     @ManyToOne
     @JoinColumn(name = "poidsproduit_id"/*, nullable = false*/)

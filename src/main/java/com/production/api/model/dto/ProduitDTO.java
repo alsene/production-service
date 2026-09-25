@@ -18,6 +18,7 @@ public class ProduitDTO extends AbstractDTO {
     private String quantite;
 
     private String code;
+    private String jourJulien;
 
     private Client client;
 
@@ -32,6 +33,8 @@ public class ProduitDTO extends AbstractDTO {
     private TypeProduit typeProduit;
 
     private PoidsProduit poidsProduit;
+    private Station station;
+    private SiloTypeProduit siloTypeProduit;
 
     private String qualite;
 

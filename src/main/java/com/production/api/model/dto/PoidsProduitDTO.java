@@ -8,6 +8,8 @@ import lombok.EqualsAndHashCode;
 public class PoidsProduitDTO extends AbstractDTO {
     private Long id;
     private String poids;
+    private String unitePoids;
     private String codePoids;
+    private String libelle;
 }
 

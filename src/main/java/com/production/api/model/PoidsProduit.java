@@ -21,6 +21,13 @@ public class PoidsProduit extends AbstractEntity{
     @Column(name = "poids", length = 4, nullable = false)
     private String poids;
 
+    @Column(name = "unite_poids", length = 4)
+    private String unitePoids;
+
     @Column(name = "code_poids", length = 6, nullable = false)
     private String codePoids;
+
+    @Transient
+    private String libelle;
+
 }

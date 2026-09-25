@@ -2,6 +2,7 @@ package com.production.api.service;
 
 import com.production.api.model.PoidsProduit;
 import com.production.api.repository.PoidsProduitRepository;
+import com.production.api.util.EnrichirLibelle;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class SrvPoidsProduit {
     public Mono<PoidsProduit> savePoidsProduit(PoidsProduit poidsProduit) {
         return Mono.fromCallable(() -> {
             log.info("Saving PoidsProduit to database: {}", poidsProduit);
+            EnrichirLibelle.libellePoidsProduit(poidsProduit);
             PoidsProduit saved = poidsProduitRepository.save(poidsProduit);
             log.info("PoidsProduit saved with id: {}", saved.getId());
             return saved;
@@ -40,7 +42,9 @@ public class SrvPoidsProduit {
                     .orElseThrow(() -> new IllegalArgumentException("PoidsProduit not found with id: " + poidsProduit.getId()));
 
             existingPoidsProduit.setPoids(poidsProduit.getPoids());
+            existingPoidsProduit.setUnitePoids(poidsProduit.getUnitePoids());
             existingPoidsProduit.setCodePoids(poidsProduit.getCodePoids());
+            EnrichirLibelle.libellePoidsProduit(existingPoidsProduit);
 
             return poidsProduitRepository.save(existingPoidsProduit);
         });
@@ -58,15 +62,19 @@ public class SrvPoidsProduit {
     public Mono<PoidsProduit> getPoidsProduitById(Long id) {
         return Mono.fromCallable(() -> {
             log.info("Fetching PoidsProduit with id: {}", id);
-            return poidsProduitRepository.findById(id)
+            PoidsProduit poidsProduit = poidsProduitRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("PoidsProduit not found with id: " + id));
+            EnrichirLibelle.libellePoidsProduit(poidsProduit);
+            return poidsProduit;
         });
     }
 
     public Mono<List<PoidsProduit>> getAllPoidsProduits() {
         return Mono.fromCallable(() -> {
             log.info("Fetching all PoidsProduits from database");
-            return poidsProduitRepository.findAll();
+            List<PoidsProduit> result = poidsProduitRepository.findAll();
+            result.forEach(EnrichirLibelle::libellePoidsProduit);
+            return result;
         });
     }
 }

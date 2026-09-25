@@ -1,14 +1,19 @@
 package com.production.api.service;
 
 import com.production.api.client.ClientProduit;
+import com.production.api.model.Lot;
+import com.production.api.model.PoidsProduit;
 import com.production.api.model.Produit;
+import com.production.api.model.SiloTypeProduit;
 import com.production.api.model.dto.ProduitDTO;
 import com.production.api.model.mapper.ProduitMapper;
 import com.production.api.repository.ProduitRepository;
+import com.production.api.util.EnrichirLibelle;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -43,6 +48,7 @@ public class SrvProduit {
     public Mono<Produit> ajouterProduit(Produit produit) {
         return Mono.fromCallable(() -> {
             log.info("Saving produit to database: {}", produit);
+            EnrichirLibelle.libelleProduit(produit);
             Produit saved = produitRepository.save(produit);
             log.info("Produit saved with id: {}", saved.getId());
             return saved;
@@ -85,7 +91,7 @@ public class SrvProduit {
             // Utiliser le mapper pour copier les champs non-null
             produitMapper.updateObjFromDto(produitDTO, produitExistant);
             produitExistant.setDateModification(new Date());
-
+            EnrichirLibelle.libelleProduit(produitExistant);
             produitRepository.save(produitExistant);
             log.info("Produit modifié avec id: {}", produitExistant.getId());
             return produitExistant;
@@ -98,8 +104,10 @@ public class SrvProduit {
     public Mono<Produit>  getProduitById(Long id) {
         return Mono.fromCallable(() -> {
             log.info("Fetching produit with id: {}", id);
-            return produitRepository.findById(id)
+            Produit produit= produitRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Produit not found with id: " + id));
+            EnrichirLibelle.libelleProduit(produit);
+            return produit;
         });
     }
 
@@ -129,7 +137,9 @@ public class SrvProduit {
     public Mono<Produit> findByQualite(String qualite) {
         return Mono.fromCallable(() -> {
             log.info("Fetching all produits from database");
-            return produitRepository.findByQualite(qualite);
+            Produit produit=  produitRepository.findByQualite(qualite);
+            EnrichirLibelle.libelleProduit(produit);
+            return produit;
         });
     }
 
@@ -140,7 +150,9 @@ public class SrvProduit {
     public Mono<List<Produit>> findAllProduitsByQualite(String qualite) {
         return Mono.fromCallable(() -> {
             log.info("Fetching all Lots from database");
-            return produitRepository.findAllProduitsByQualite(qualite);
+            List<Produit> produits=  produitRepository.findAllProduitsByQualite(qualite);
+            produits.forEach(EnrichirLibelle::libelleProduit);
+            return produits;
         });
     }
     /**
@@ -150,7 +162,9 @@ public class SrvProduit {
     public Mono<List<Produit>> findAllProduitsByEncours(String encours) {
         return Mono.fromCallable(() -> {
             log.info("Fetching all Lots from database");
-            return produitRepository.findAllProduitsByEncours(Boolean.valueOf(encours));
+            List<Produit> produits=  produitRepository.findAllProduitsByEncours(Boolean.valueOf(encours));
+            produits.forEach(EnrichirLibelle::libelleProduit);
+            return produits;
         }).subscribeOn(Schedulers.boundedElastic());
     }
 }
