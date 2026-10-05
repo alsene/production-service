@@ -19,6 +19,7 @@ public final class EnrichirLibelle {
         Lot lot = stationLot.getLot();
         if (lot != null && lot.getNumeroProduction() != null && lot.getAnneeProduction() != null) {
             stationLot.getLot().setLibelle(lot.getNumeroProduction() + " - " + lot.getAnneeProduction());
+            stationLot.setLibelle(stationLot.getLot().getLibelle());
         }
     }
 
@@ -47,11 +48,11 @@ public final class EnrichirLibelle {
         if (produit.getLot() != null) {
             libelleLot(produit.getLot());
         }
-        if (produit.getLotBag() != null) {
-            libelleLot(produit.getLotBag());
-        }
         if (produit.getPoidsProduit() != null) {
             libellePoidsProduit(produit.getPoidsProduit());
+        }
+        if (produit.getStationLot() != null ) {
+            libelleStationLot(produit.getStationLot());
         }
         if (produit.getSiloTypeProduit() != null ) {
             libelleSiloTypeProduit(produit.getSiloTypeProduit());

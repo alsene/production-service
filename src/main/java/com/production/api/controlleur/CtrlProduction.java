@@ -81,14 +81,18 @@ public class CtrlProduction {
             throw new RuntimeException(e);
         }
     }
-
+    private static void enrichirMapperProduit(ProduitDTO produitDTO) {
+        produitDTO.setJourJulien(JourJulien.getJourJulien());
+        produitDTO.setTypeProduit(produitDTO.getSiloTypeProduit().getTypeProduit());
+        produitDTO.setNom(produitDTO.getSiloTypeProduit().getLibelle());
+        produitDTO.setLot(produitDTO.getStationLot().getLot());
+    }
     @PostMapping(value = "/ajouter")
     public ResponseEntity<Produit> ajouterProduit(@RequestBody ProduitDTO produitDTO){
         log.info("POST /api/production/endpoint/produit/v1/ajouter called");
         Utilisateur operateur= new Utilisateur();
         operateur.setId(1L);
         produitDTO.setOperateur(operateur);
-        produitDTO.setNom("couscous");
         produitDTO.setQualite(Qualite.DEFAULT.name());
         produitDTO.setIdUserCreation(1L);
         produitDTO.setIdUserModification(1L);
@@ -97,7 +101,7 @@ public class CtrlProduction {
         produitDTO.setArecycler(Boolean.FALSE);
         produitDTO.setFulmine(Boolean.FALSE);
         produitDTO.setConforme(Boolean.FALSE);
-        produitDTO.setJourJulien(JourJulien.getJourJulien());
+        enrichirMapperProduit(produitDTO);
         Produit produit = produitMapper.toEntity(produitDTO);
         // Assuming there's a method to add a product
         Produit addedProduit= srvProduit.ajouterProduit(produit).block(); // Blocking call to add the product
@@ -117,7 +121,7 @@ public class CtrlProduction {
     public ResponseEntity<Produit> modifierProduit(@RequestBody ProduitDTO produitDTO){
         log.info("POST /api/production/endpoint/produit/v1/modifier called");
         // Assuming there's a method to add a product
-        produitDTO.setJourJulien(JourJulien.getJourJulien());
+        enrichirMapperProduit(produitDTO);
         Produit updatedProduit= srvProduit.modifierProduit(produitDTO).block(); // Blocking call to add the product// Set to null for now, can be populated with actual return status if needed
         return ResponseEntity.ok(updatedProduit);
     }
@@ -431,16 +435,16 @@ public class CtrlProduction {
         return ResponseEntity.ok(stationLots);
     }
 
-    @GetMapping(value = "/findStationLotByStationId")
-    public ResponseEntity<List<StationLot>> findStationLotByStationId(@RequestParam String stationId ){
-        log.info("GET /api/production/endpoint/produit/v1/findStationLotByStationId called");
+    @GetMapping(value = "/findByStationId")
+    public ResponseEntity<List<StationLot>> findByStationId(@RequestParam String stationId ){
+        log.info("GET /api/production/endpoint/produit/v1/findByStationId called");
         List<StationLot> stationLots = srvStationLot.findByStationId(stationId).block();
         return ResponseEntity.ok(stationLots);
     }
 
-    @GetMapping(value = "/findStationLotByLotId/{lotId}")
-    public ResponseEntity<List<StationLot>> findStationLotByLotId(@PathVariable String lotId){
-        log.info("GET /api/production/endpoint/produit/v1/findStationLotByLotId called");
+    @GetMapping(value = "/findByLotId/{lotId}")
+    public ResponseEntity<List<StationLot>> findByLotId(@PathVariable String lotId){
+        log.info("GET /api/production/endpoint/produit/v1/findByLotId called");
         List<StationLot> stationLots = srvStationLot.findByLotId(lotId).block();
         return ResponseEntity.ok(stationLots);
     }

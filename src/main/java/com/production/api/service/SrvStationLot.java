@@ -26,7 +26,7 @@ public class SrvStationLot {
     public Mono<StationLot> saveStationLot(StationLot stationLot) {
         return Mono.fromCallable(() -> {
             log.info("Saving StationLot to database: {}", stationLot);
-            EnrichirLibelle.libelleLot(stationLot.getLot());
+            EnrichirLibelle.libelleStationLot(stationLot);
             StationLot saved = stationLotRepository.save(stationLot);
             log.info("StationLot saved with id: {}", saved.getId());
             return saved;
@@ -44,7 +44,7 @@ public class SrvStationLot {
 
             existing.setStation(stationLot.getStation());
             existing.setLot(stationLot.getLot());
-            EnrichirLibelle.libelleLot(existing.getLot());
+            EnrichirLibelle.libelleStationLot(existing);
             return stationLotRepository.save(existing);
         });
     }
@@ -63,7 +63,7 @@ public class SrvStationLot {
             log.info("Fetching StationLot with id: {}", id);
             StationLot stationLot = stationLotRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("StationLot not found with id: " + id));
-            EnrichirLibelle.libelleLot(stationLot.getLot());
+            EnrichirLibelle.libelleStationLot(stationLot);
             return stationLot;
         });
     }

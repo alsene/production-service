@@ -25,4 +25,7 @@ public class StationLot extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "lot_id", nullable = false)
     private Lot lot;
+
+    @Transient
+    private String libelle;
 }

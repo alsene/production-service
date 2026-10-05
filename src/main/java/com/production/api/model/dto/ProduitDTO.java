@@ -26,14 +26,13 @@ public class ProduitDTO extends AbstractDTO {
 
     private Lot lot;
 
-    private Lot lotBag;
-
     private Silo silo;
 
     private TypeProduit typeProduit;
 
     private PoidsProduit poidsProduit;
     private Station station;
+    private StationLot stationLot;
     private SiloTypeProduit siloTypeProduit;
 
     private String qualite;

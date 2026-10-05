@@ -23,10 +23,7 @@ public class ResponseProduction {
     private List<Produit> produitsExpedier;
     private List<Produit> produitsArecycler;
     private List<Silo> silos;
-    private List<Lot> lots;
-    private List<Lot> lotBags;
     private List<Client> clients;
-    private List<TypeProduit> typeProduits;
     private List<Utilisateur> operateurs;
     private List<Utilisateur> listQA;
     private List<String> qualites;

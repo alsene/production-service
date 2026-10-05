@@ -27,9 +27,6 @@ public class Produit extends AbstractEntity{
     @Column(name = "quantite"/*, nullable = false*/)
     private BigDecimal quantite;
 
-    @Column(name = "numero", length = 20)
-    private String numero;
-
     @Column(name = "code", length = 20)
     private String code;
 
@@ -47,10 +44,6 @@ public class Produit extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "lot_id", nullable = false)
     private Lot lot;
-
-    @ManyToOne
-    @JoinColumn(name = "lotBag_id", nullable = false)
-    private Lot lotBag;
 
     @ManyToOne
     @JoinColumn(name = "silo_id", nullable = false)
@@ -71,6 +64,10 @@ public class Produit extends AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "poidsproduit_id"/*, nullable = false*/)
     private PoidsProduit poidsProduit;
+
+    @ManyToOne
+    @JoinColumn(name = "stationlot_id"/*, nullable = false*/)
+    private StationLot stationLot;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "qualite", length = 20, nullable = false)
