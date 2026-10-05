@@ -1,0 +1,189 @@
+{
+  "info": {
+    "name": "Production Service - StationLot",
+    "_postman_id": "8b8b5ecf-7d34-4f70-93ab-c1b3f4a1b8b6",
+    "description": "Collection Postman pour tester les endpoints StationLot.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8081"
+    },
+    {
+      "key": "stationId",
+      "value": "1"
+    },
+    {
+      "key": "lotId",
+      "value": "1"
+    },
+    {
+      "key": "stationLotId",
+      "value": "1"
+    }
+  ],
+  "item": [
+    {
+      "name": "Obtenir StationLots",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/production/endpoint/produit/v1/obtenirStationLots",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "production",
+            "endpoint",
+            "produit",
+            "v1",
+            "obtenirStationLots"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Find StationLot By StationId",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/production/endpoint/produit/v1/findStationLotByStationId?stationId={{stationId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "production",
+            "endpoint",
+            "produit",
+            "v1",
+            "findStationLotByStationId"
+          ],
+          "query": [
+            {
+              "key": "stationId",
+              "value": "{{stationId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Find StationLot By LotId",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/production/endpoint/produit/v1/findStationLotByLotId/{{lotId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "production",
+            "endpoint",
+            "produit",
+            "v1",
+            "findStationLotByLotId",
+            "{{lotId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ajouter StationLot",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"station\": {\n    \"id\": {{stationId}}\n  },\n  \"lot\": {\n    \"id\": {{lotId}}\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/production/endpoint/produit/v1/ajouterStationLot",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "production",
+            "endpoint",
+            "produit",
+            "v1",
+            "ajouterStationLot"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Modifier StationLot",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": {{stationLotId}},\n  \"station\": {\n    \"id\": {{stationId}}\n  },\n  \"lot\": {\n    \"id\": {{lotId}}\n  }\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/production/endpoint/produit/v1/modifierStationLot",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "production",
+            "endpoint",
+            "produit",
+            "v1",
+            "modifierStationLot"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Supprimer StationLot",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"id\": {{stationLotId}}\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/production/endpoint/produit/v1/supprimerStationLot",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "production",
+            "endpoint",
+            "produit",
+            "v1",
+            "supprimerStationLot"
+          ]
+        }
+      }
+    }
+  ]
+}
+

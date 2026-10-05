@@ -1,9 +1,6 @@
 package com.production.api.util;
 
-import com.production.api.model.Lot;
-import com.production.api.model.PoidsProduit;
-import com.production.api.model.Produit;
-import com.production.api.model.SiloTypeProduit;
+import com.production.api.model.*;
 
 public final class EnrichirLibelle {
     public static void libelleLot(Lot lot) {
@@ -12,6 +9,16 @@ public final class EnrichirLibelle {
         }
         if (lot.getNumeroProduction() != null && lot.getAnneeProduction()!= null) {
             lot.setLibelle(lot.getNumeroProduction() + " - " + lot.getAnneeProduction());
+        }
+    }
+
+    public static void libelleStationLot(StationLot stationLot) {
+        if (stationLot == null) {
+            return;
+        }
+        Lot lot = stationLot.getLot();
+        if (lot != null && lot.getNumeroProduction() != null && lot.getAnneeProduction() != null) {
+            stationLot.getLot().setLibelle(lot.getNumeroProduction() + " - " + lot.getAnneeProduction());
         }
     }
 

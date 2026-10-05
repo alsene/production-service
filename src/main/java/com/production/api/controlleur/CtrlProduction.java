@@ -34,6 +34,7 @@ public class CtrlProduction {
     private final SrvSilo srvSilo;
     private final SrvSiloTypeProduit srvSiloTypeProduit;
     private final SrvStation srvStation;
+    private final SrvStationLot srvStationLot;
     private final SrvClient srvClient;
     private final SrvPdfProduction srvPdfProduction;
     private final FacadeProductionService facadeProductionService;
@@ -45,6 +46,7 @@ public class CtrlProduction {
     private final SiloMapper siloMapper;
     private final SiloTypeProduitMapper siloTypeProduitMapper;
     private final StationMapper stationMapper;
+    private final StationLotMapper stationLotMapper;
     private final ClientMapper clientMapper;
 
 
@@ -419,6 +421,53 @@ public class CtrlProduction {
     public ResponseEntity<Void> supprimerPoidsProduit(@RequestBody PoidsProduitDTO poidsProduitDTO){
         log.info("POST /api/production/endpoint/produit/v1/supprimerPoidsProduit called");
         srvPoidsProduit.supprimerPoidsProduit(poidsProduitDTO.getId()).block();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping(value = "/obtenirStationLots")
+    public ResponseEntity<List<StationLot>> obtenirStationLots(){
+        log.info("GET /api/production/endpoint/produit/v1/obtenirStationLots called");
+        List<StationLot> stationLots = srvStationLot.getAllStationLots().block();
+        return ResponseEntity.ok(stationLots);
+    }
+
+    @GetMapping(value = "/findStationLotByStationId")
+    public ResponseEntity<List<StationLot>> findStationLotByStationId(@RequestParam String stationId ){
+        log.info("GET /api/production/endpoint/produit/v1/findStationLotByStationId called");
+        List<StationLot> stationLots = srvStationLot.findByStationId(stationId).block();
+        return ResponseEntity.ok(stationLots);
+    }
+
+    @GetMapping(value = "/findStationLotByLotId/{lotId}")
+    public ResponseEntity<List<StationLot>> findStationLotByLotId(@PathVariable String lotId){
+        log.info("GET /api/production/endpoint/produit/v1/findStationLotByLotId called");
+        List<StationLot> stationLots = srvStationLot.findByLotId(lotId).block();
+        return ResponseEntity.ok(stationLots);
+    }
+
+    @PostMapping(value = "/ajouterStationLot")
+    public ResponseEntity<StationLot> ajouterStationLot(@RequestBody StationLotDTO stationLotDTO){
+        log.info("POST /api/production/endpoint/produit/v1/ajouterStationLot called");
+        StationLot stationLot = stationLotMapper.toEntity(stationLotDTO);
+        stationLot.setIdUserCreation(1L);
+        stationLot.setIdUserModification(1L);
+        StationLot addedStationLot = srvStationLot.saveStationLot(stationLot).block();
+        return ResponseEntity.ok(addedStationLot);
+    }
+
+    @PostMapping(value = "/modifierStationLot")
+    public ResponseEntity<StationLot> modifierStationLot(@RequestBody StationLotDTO stationLotDTO){
+        log.info("POST /api/production/endpoint/produit/v1/modifierStationLot called");
+        StationLot stationLot = stationLotMapper.toEntityForUpdate(stationLotDTO);
+        stationLot.setIdUserModification(1L);
+        StationLot updatedStationLot = srvStationLot.modifierStationLot(stationLot).block();
+        return ResponseEntity.ok(updatedStationLot);
+    }
+
+    @PostMapping(value = "/supprimerStationLot")
+    public ResponseEntity<Void> supprimerStationLot(@RequestBody StationLotDTO stationLotDTO){
+        log.info("POST /api/production/endpoint/produit/v1/supprimerStationLot called");
+        srvStationLot.supprimerStationLot(stationLotDTO.getId()).block();
         return ResponseEntity.ok().build();
     }
 }
