@@ -1,10 +1,7 @@
 package com.production.api.service;
 
 import com.production.api.client.ClientProduit;
-import com.production.api.model.Lot;
-import com.production.api.model.PoidsProduit;
-import com.production.api.model.Produit;
-import com.production.api.model.SiloTypeProduit;
+import com.production.api.model.*;
 import com.production.api.model.dto.ProduitDTO;
 import com.production.api.model.mapper.ProduitMapper;
 import com.production.api.repository.ProduitRepository;
@@ -20,6 +17,7 @@ import reactor.core.scheduler.Schedulers;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -82,10 +80,12 @@ public class SrvProduit {
             }
 
             // Vérifier que le produit existe
-            Produit produitExistant = produitRepository.findProduitByCode(produitDTO.getCode());
-
-            if (produitExistant == null) {
-                throw new IllegalArgumentException("Produit not found with code: " + produitDTO.getCode());
+            Optional<Produit> prodExistant = produitRepository.findById(Long.valueOf(produitDTO.getId()));
+            Produit produitExistant;
+            if (prodExistant.isPresent()) {
+                produitExistant = prodExistant.get();
+            }else{
+                throw new IllegalArgumentException("produit n'est trouvé  with id: " + produitDTO.getId());
             }
 
             // Utiliser le mapper pour copier les champs non-null

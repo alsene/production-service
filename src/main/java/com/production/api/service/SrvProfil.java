@@ -76,9 +76,6 @@ public class SrvProfil {
             }else{
                 throw new IllegalArgumentException("Profil not found with code: " + profilDTO.getId());
             }
-            if (profilExistant == null) {
-                throw new IllegalArgumentException("Profil not found with code: " + profilDTO.getId());
-            }
 
             // Utiliser le mapper pour copier les champs non-null
             profilMapper.updateObjFromDto(profilDTO, profExistant);
